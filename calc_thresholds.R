@@ -1,3 +1,23 @@
+rm(list=ls())
+## This is a list of flags indicating what you want done when you
+## run this particular file -- useful if you done some computationally
+## intensive step and want to skip it (set to FALSE) on later runs.
+## In general each step is dependent upon its predecessors, so if you
+## set a step to TRUE, you should probably set the steps before it
+## to true as well
+
+## working directory
+server=FALSE
+if (server){
+  wd <- "//10.0.0.5/data2$//BN vulnerability/Full Process/"
+  code_loc="Y:/code/BN_code/"
+}else{
+  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template"
+  code_loc="C:/Users/lfortini/code/BN_code/"
+}
+
+setwd(wd)
+
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 rld <- read.csv("allspp.csv", stringsAsFactors=FALSE)
 
