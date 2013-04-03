@@ -12,7 +12,7 @@ if (server){
   wd <- "//10.0.0.5/data2$//BN vulnerability/Full Process/"
 }else{
   wd <- "C:/Users/lfortini/Full Process test/"}
-code_loc="C:/Users/lfortini/Google Drive/code/BN code/"
+code_loc="Y:/code/BN_code/"
 setwd(wd)
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
