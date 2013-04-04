@@ -16,14 +16,14 @@ if (server){
   code_loc="C:/Users/lfortini/code/BN_code/"
 }
 setwd(wd)
-categorize.GIS.data <- TRUE
-calc_priors= TRUE
+categorize.GIS.data <- FALSE
+calc_priors= FALSE
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
-plot_hist = TRUE ##if categorizing data, this switch controls whether histograms of all model
+plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
-add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
-create.catnet.model <- FALSE
-calculate.conditional.ps <- FALSE
+add.spp.to.GeNIe.model <- TRUE # this step could reasonably be skipped
+create.catnet.model <- TRUE
+calculate.conditional.ps <- TRUE
 sp_list_offset=NULL #c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
 csv_out_data="results/selected_spp_vulnerability_scores.csv"
@@ -60,7 +60,7 @@ sppinterest.file <- "spinterest_test_sp.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
-model.file <- "conceptual_model05_knownfactors_equalweights.xdsl"
+model.file <- "conceptual_model05_unknownfactors_equalweights_priors.xdsl"
 
 ## A sample model file to use when adding cases to the GeNIe model.
 ## I usually generate this by deleting all cases from the current
@@ -68,7 +68,7 @@ model.file <- "conceptual_model05_knownfactors_equalweights.xdsl"
 ## "delete me" to avoid species name collisions)
 ## Right now the code needs a blank, unpopulated GeNiE model
 ## with a single placeholder case
-model.file.in <- "dummy_empty_model05_knownfactors_equalweights.xdsl"
+model.file.in <- "conceptual_model05_unknownfactors_equalweights_priors_template.xdsl"
 
 ## this is the file name to use for the output GeNIe model
 model.file.out <- "test.out.xdsl"

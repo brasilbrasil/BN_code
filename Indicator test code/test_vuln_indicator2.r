@@ -1,3 +1,5 @@
+##this code creates random response probabilities to look at how the vulnerability indicator
+##will behave
 rm(list=ls())
 ## working directory
 wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/Conceptual model/2- implementation (mine)/Full Process/indicator test/"
