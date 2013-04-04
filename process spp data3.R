@@ -12,7 +12,7 @@ if (server){
   wd <- "//10.0.0.5/data2$//BN vulnerability/Full Process/"
   code_loc="Y:/code/BN_code/"
 }else{
-  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template"
+  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template/"
   code_loc="C:/Users/lfortini/code/BN_code/"
 }
 setwd(wd)
@@ -51,7 +51,7 @@ data.file <- "allspp.csv"
 ## specify which quantiles to use in assigning categories
 ## (default is to use median for two categories, 1st and 3rd
 ## quartiles for 3 categories)
-variables.file <- "variables.csv"
+variables.file <- "variables_no_lava.csv"
 
 ## a table with a column "Species" containing the species we
 ## want to add cases for. GeNIe bogs down with too many cases, and
