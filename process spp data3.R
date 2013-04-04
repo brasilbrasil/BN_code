@@ -9,13 +9,14 @@ rm(list=ls())
 ## working directory
 server=FALSE
 if (server){
-  wd <- "//10.0.0.5/data2$//BN vulnerability/Full Process/"
+  wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
 }else{
   wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template/"
   code_loc="C:/Users/lfortini/code/BN_code/"
 }
 setwd(wd)
+
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
@@ -35,6 +36,11 @@ overwrite_ps= FALSE
 ## is going on. Set noisy to 0 to shut things up.
 calculate.parallel <- FALSE
 do_correl_analyses= FALSE
+config_file="config_file1.r"
+
+if (config_file!=NULL){
+  source(paste(code_loc,config_file, sep=""))
+}
 cores <- NULL
 noisy <- 3
 
@@ -56,7 +62,7 @@ variables.file <- "variables_no_lava.csv"
 ## a table with a column "Species" containing the species we
 ## want to add cases for. GeNIe bogs down with too many cases, and
 ## sometimes we'll only want updates for a subset of species
-sppinterest.file <- "spinterest_test_sp.csv"
+sppinterest.file <- "spinterest.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
@@ -81,9 +87,9 @@ cat.data.file <- "qrld.csv"
 ## "Resist" is the model node name usually interpreted as
 ## "Tolerate"
 
-output.nodes <- c("Resist", "Migrate", "Micro_refugia")
-#output.nodes <- c("Resist", "Migrate", "Micro_refugia","Effective_MRF_area", "Effective_Tol_zone_area", "Effective_Mig_area",
-#                  "Habitat_qual_MRF", "Tol_Zone_Habitat_qual", "Mig_Zone_Habitat_qual", "Dispersion")
+#output.nodes <- c("Resist", "Migrate", "Micro_refugia")
+output.nodes <- c("Resist", "Migrate", "Micro_refugia","Effective_MRF_area", "Effective_Tol_zone_area", "Effective_Mig_area",
+                  "Habitat_qual_MRF", "Tol_Zone_Habitat_qual", "Mig_Zone_Habitat_qual", "Dispersion")
 
 ## Some functions to take a previously set flag to determine
 ## how much progress to report
