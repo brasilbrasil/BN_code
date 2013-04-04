@@ -1,3 +1,4 @@
+#must run process spp data script first
 library(reshape2)
 library(plyr)
 
@@ -24,4 +25,5 @@ for (var in vars){
   i=i+1
 }
 
+all_counts=all_counts[all_counts[,"V16"]!=Inf,] #get rid of internal BN model vars
 write.csv(all_counts, "all_priors.csv", row.names=TRUE)
