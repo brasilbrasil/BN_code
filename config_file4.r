@@ -6,7 +6,7 @@ plot_hist = FALSE ##if categorizing data, this switch controls whether histogram
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- TRUE
-sp_list_offset=c(750,1086) #NULL, c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
+sp_list_offset=c(750,1000) #NULL, c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
 csv_out_data="results/selected_spp_vulnerability_scores.csv"
 overwrite_ps= FALSE

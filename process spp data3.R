@@ -7,7 +7,7 @@ rm(list=ls())
 ## to true as well
 
 ## working directory
-server=FALSE
+server=TRUE
 if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
@@ -17,6 +17,7 @@ if (server){
 }
 setwd(wd)
 
+project_name="unknownfactors_equalweights_wpriors"
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
@@ -36,9 +37,9 @@ overwrite_ps= FALSE
 ## is going on. Set noisy to 0 to shut things up.
 calculate.parallel <- FALSE
 do_correl_analyses= FALSE
-config_file="config_file1.r"
+config_file="config_file4.r"
 
-if (config_file!=NULL){
+if (!is.null(config_file)){
   source(paste(code_loc,config_file, sep=""))
 }
 cores <- NULL
@@ -66,7 +67,7 @@ sppinterest.file <- "spinterest.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
-model.file <- "conceptual_model05_unknownfactors_equalweights_priors.xdsl"
+model.file <- "conceptual_model05_unknownfactors_equalweights_wpriors.xdsl"
 
 ## A sample model file to use when adding cases to the GeNIe model.
 ## I usually generate this by deleting all cases from the current
