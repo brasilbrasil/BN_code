@@ -26,9 +26,10 @@ add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- FALSE
 merge_all_results_and_data=FALSE
+expert_comparison=TRUE
 do_correl_analyses= FALSE
 create_response_histograms=FALSE
-vulnerability_contrasts=TRUE
+vulnerability_contrasts=FALSE
 
 
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
@@ -72,7 +73,7 @@ sppinterest.file <- "spinterest.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
-model.file <- "conceptual_model05_unknownfactors_equalweights_priors.xdsl"
+model.file <- "conceptual_model05_knownfactors_equalweights_priors.xdsl"
 
 ## A sample model file to use when adding cases to the GeNIe model.
 ## I usually generate this by deleting all cases from the current
@@ -80,7 +81,7 @@ model.file <- "conceptual_model05_unknownfactors_equalweights_priors.xdsl"
 ## "delete me" to avoid species name collisions)
 ## Right now the code needs a blank, unpopulated GeNiE model
 ## with a single placeholder case
-model.file.in <- "conceptual_model05_unknownfactors_equalweights_priors_template.xdsl"
+model.file.in <- "conceptual_model05_knownfactors_equalweights_priors_template.xdsl"
 
 ## this is the file name to use for the output GeNIe model
 model.file.out <- paste(project_name,"_test_out.xdsl", sep="")
@@ -147,6 +148,12 @@ if (calculate.conditional.ps) {
 if (merge_all_results_and_data){
   source(paste(code_loc,"merge_all_data.R", sep=""))
 }
+
+if (expert_comparison){
+  dir.create("expert_comparison/", showWarnings=FALSE)
+  source(paste(code_loc,"expert_vs_model_ranks_integrated.R", sep=""))
+}
+
 if (do_correl_analyses){
   source(paste(code_loc,"correls3.R", sep=""))
 }
