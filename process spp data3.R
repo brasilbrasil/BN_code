@@ -20,12 +20,18 @@ setwd(wd)
 project_name="unknwnfacs_eqwgts_priors"
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
-threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- FALSE
+merge_all_results_and_data=FALSE
+do_correl_analyses= FALSE
+create_response_histograms=FALSE
+vulnerability_contrasts=TRUE
+
+
+threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 sp_list_offset=NULL #c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
 csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
@@ -36,8 +42,6 @@ overwrite_ps= FALSE
 ## script will print timestamps and other diagnostics about what
 ## is going on. Set noisy to 0 to shut things up.
 calculate.parallel <- FALSE
-merge_all_results_and_data=TRUE
-do_correl_analyses= TRUE
 config_file=NULL#"config_file4.r"
 
 if (!is.null(config_file)){
@@ -145,6 +149,16 @@ if (merge_all_results_and_data){
 }
 if (do_correl_analyses){
   source(paste(code_loc,"correls3.R", sep=""))
+}
+
+if (create_response_histograms){
+  dir.create("graphs/vuln_graphs/",showWarnings=FALSE)
+  source(paste(code_loc,"vulnerability_histograms.R", sep=""))
+}
+
+if (vulnerability_contrasts){
+  dir.create("comparisons/",showWarnings=FALSE)
+  source(paste(code_loc,"vulnerability_contrasts7.r", sep=""))
 }
 
 
