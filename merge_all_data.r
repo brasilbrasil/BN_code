@@ -1,20 +1,12 @@
-server=FALSE
-if (server){
-  wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
-}else{
-  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template/"
-}
-setwd(wd)
-
 cat.data.file <- paste(project_name, "_qrld.csv",sep="")
-data.file <- paste(project_name, "_rld.csv",sep="")
+uncat.data.file <- paste(project_name, "_rld.csv",sep="")
 aux_data_file="//10.0.0.5/data2$//VA data/CAO/spp_habitat_requirements.csv"
 
 veg_file="dominant_veg_classes.csv"
 all_vulnerabilities_file=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
 all_combined_file=paste("results/",project_name,"_all_combined.csv", sep="")
 
-data=read.csv(data.file, stringsAsFactors=FALSE)
+data=read.csv(uncat.data.file, stringsAsFactors=FALSE)
 cat_data=read.csv(cat.data.file, stringsAsFactors=FALSE)
 jnkk=names(cat_data)
 jnkk1=c()

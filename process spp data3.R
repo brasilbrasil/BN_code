@@ -25,7 +25,7 @@ plot_hist = FALSE ##if categorizing data, this switch controls whether histogram
                  ##variables will be created, with the breakpoints for the categories ploted along
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
-calculate.conditional.ps <- TRUE
+calculate.conditional.ps <- FALSE
 sp_list_offset=NULL #c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
 csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
@@ -36,7 +36,7 @@ overwrite_ps= FALSE
 ## script will print timestamps and other diagnostics about what
 ## is going on. Set noisy to 0 to shut things up.
 calculate.parallel <- FALSE
-merge_all_results_and_data=FALSE
+merge_all_results_and_data=TRUE
 do_correl_analyses= TRUE
 config_file=NULL#"config_file4.r"
 

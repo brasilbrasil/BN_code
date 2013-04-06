@@ -67,7 +67,7 @@ for (uniq_var_type in uniq_var_types){
   #cor(sub_jnk$"Ugly habitat (MRF zone)", sub_jnk$"Current envelope area", use="complete.obs")
   #jnk_p <- cor.mtest(sub_jnk,0.95)
   jnk=cor(sub_jnk, use="complete.obs")
-  jpeg_name=paste("correls/correls_", project_name, "_",uniq_var_type,".jpg", sep="")
+  jpeg_name=paste("correls/", project_name, "_correls_",uniq_var_type,".jpg", sep="")
   jpeg(jpeg_name,
        width = 8, height = 8, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -77,7 +77,7 @@ for (uniq_var_type in uniq_var_types){
            addCoef.col="black", addCoefasPercent = TRUE,
            p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")  
   dev.off()    
-  write.csv(jnk, paste("correls/correls_",  project_name, "_",uniq_var_type,".csv", sep=""), row.names=TRUE)
+  write.csv(jnk, paste("correls/",  project_name, "_correls_",uniq_var_type,".csv", sep=""), row.names=TRUE)
 }
 
 ##############CORELS BY TYPE2#################
@@ -91,7 +91,7 @@ for (uniq_var_type in uniq_var_types){
     sub_jnk$"Distance between current and future suitable range"[!is.finite(sub_jnk$"Distance between current and future suitable range")]=max(sub_jnk$"Distance between current and future suitable range")    
   }  
   jnk=cor(sub_jnk, use="complete.obs")
-  jpeg_name=paste("correls/correls_",  project_name, "_",uniq_var_type,".jpg", sep="")
+  jpeg_name=paste("correls/",  project_name, "_correls_",uniq_var_type,".jpg", sep="")
   jpeg(jpeg_name,
        width = 8, height = 8, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -99,7 +99,7 @@ for (uniq_var_type in uniq_var_types){
            addCoef.col="black", addCoefasPercent = TRUE,
            p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")    
   dev.off()    
-  write.csv(jnk, paste("correls/correls_",  project_name, "_", uniq_var_type,".csv", sep=""), row.names=TRUE)
+  write.csv(jnk, paste("correls/",  project_name, "_correls_", uniq_var_type,".csv", sep=""), row.names=TRUE)
 }
 
 ##############CORELS LIMITED#################
@@ -132,7 +132,7 @@ corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.co
          addCoef.col="black", addCoefasPercent = TRUE,
          p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")  
 dev.off()    
-write.csv(jnk, paste("correls/correl_",  project_name, "_independents_matrix.csv", sep=""), row.names=TRUE)
+write.csv(jnk, paste("correls/",  project_name, "_correl_independents_matrix.csv", sep=""), row.names=TRUE)
 
 # ##############CORELS DEPENDENTS#################
 # jnk=cor(jnk00, use="complete.obs")
@@ -156,7 +156,7 @@ corrplot(jnk, order="original", method="circle", tl.pos="lt", type="upper", tl.c
          addCoef.col="black", addCoefasPercent = TRUE,
          p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")  
 dev.off()    
-write.csv(jnk, paste("correls/correl_",  project_name, "_independents_matrix_no_resp.csv", sep=""), row.names=TRUE)
+write.csv(jnk, paste("correls/",  project_name, "_correl_independents_matrix_no_resp.csv", sep=""), row.names=TRUE)
 
 ##############CORELS#################
 jnk0=all_combined[,3:dim(all_combined)[2]]
@@ -169,7 +169,7 @@ jpeg(jpeg_name,
 corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.4, tl.srt=45)
 dev.off()    
 
-write.csv(jnk, paste("correls/correl_",  project_name, "_correl_matrix.csv",sep=""), row.names=TRUE)
+write.csv(jnk, paste("correls/",  project_name, "_correl_correl_matrix.csv",sep=""), row.names=TRUE)
 
 
 # #############PCA#####################
