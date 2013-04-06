@@ -70,7 +70,7 @@ Abs_q5levels <- function(x, q=c(0.2, 0.4, 0.6, 0.8), lv=c("Very_small", "Small",
   return(list(quant_data, thresholds))}
 
 plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
-  jpeg_name=paste(out_graph_dir,v,".jpg", sep = "")
+  jpeg_name=paste(out_graph_dir,project_name,"_",v,".jpg", sep = "")
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -98,7 +98,7 @@ plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
 }
 
 plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty, temp_border, graph_xlabel) { #graph_name, temp_hists, thresholds, categories, temp_colors, temp_legends
-  jpeg_name=paste(out_graph_dir,v,".jpg", sep = "")
+  jpeg_name=paste(out_graph_dir,project_name,"_",v,".jpg", sep = "")
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -140,7 +140,7 @@ plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty,
 }
 
 plot_multi_hist_fx2 <- function(v, x, q, lv, temp_colors, temp_legends, graph_xlabel) { #graph_name, temp_hists, thresholds, categories, temp_colors, temp_legends
-  jpeg_name=paste(out_graph_dir,v,".jpg", sep = "")
+  jpeg_name=paste(out_graph_dir,project_name,"_",v,".jpg", sep = "")
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
@@ -519,4 +519,4 @@ qrld$CE_overlap[rld$CE_overlap == 0] <- "No"
 qrld$CE_overlap[rld$CE_overlap == 1] <- "Yes"
 
 write.csv(qrld, cat.data.file, row.names=FALSE)
-write.csv(rld, "rld.csv", row.names=FALSE)
+write.csv(rld, uncat.data.file, row.names=FALSE)

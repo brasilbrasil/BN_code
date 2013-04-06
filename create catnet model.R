@@ -92,4 +92,4 @@ length(problist) <- length(nodes)
 
 foo <- cnNew(nodes, catlist, parlist, problist)
 svm2los <- foo
-save(svm2los, file="svm2los.Rdata")
+save(svm2los, file=paste(project_name,"_svm2los.Rdata",sep=""))

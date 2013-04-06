@@ -26,4 +26,4 @@ for (var in vars){
 }
 
 all_counts=all_counts[all_counts[,"V16"]!=Inf,] #get rid of internal BN model vars
-write.csv(all_counts, "all_priors.csv", row.names=TRUE)
+write.csv(all_counts, paste(project_name, "_all_priors.csv",sep=""), row.names=TRUE)

@@ -1,16 +1,18 @@
-server=TRUE
+server=FALSE
 if (server){
-  wd <- "//10.0.0.5/data2$//BN vulnerability/Full Process/"
+  wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
 }else{
-  wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/Conceptual model/2- implementation (mine)/Full Process/"}
+  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template/"
+}
 setwd(wd)
 
-cat.data.file <- "qrld.csv"
-data.file <- "rld.csv"
+cat.data.file <- paste(project_name, "_qrld.csv",sep="")
+data.file <- paste(project_name, "_rld.csv",sep="")
 aux_data_file="//10.0.0.5/data2$//VA data/CAO/spp_habitat_requirements.csv"
+
 veg_file="dominant_veg_classes.csv"
-all_vulnerabilities_file="results/selected_spp_vulnerability_scores.csv"
-all_combined_file="results/all_combined.csv"
+all_vulnerabilities_file=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
+all_combined_file=paste("results/",project_name,"_all_combined.csv", sep="")
 
 data=read.csv(data.file, stringsAsFactors=FALSE)
 cat_data=read.csv(cat.data.file, stringsAsFactors=FALSE)

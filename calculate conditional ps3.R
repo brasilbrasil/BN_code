@@ -1,11 +1,11 @@
 ## this script assumes "create catnet model.R" has already been
 ## run. If the catnet model it creates doesn't exist, run
 ## it again.
-if (!file.exists(paste(wd,"svm2los.Rdata", sep=""))) {
+if (!file.exists(paste(wd,project_name,"_svm2los.Rdata", sep=""))) {
   #source("create catnet model.R")
   source(paste(code_loc,"create catnet model.R", sep=""))  
 }else{
-  load("svm2los.Rdata")
+  load(paste(project_name,"_svm2los.Rdata", sep=""))
 }
 ## if (somehow) the two utility functions from "catnet parsing
 ## functions.R" aren't here, run that script
@@ -51,7 +51,7 @@ null.columns <- apply(spp[splist, ], 2, function(x) length(x) - sum(is.na(x)))
 spp <- spp[, null.columns > 0]
 
 spp2 <- spp[splist, ]
-write.csv(spp2, "results/selected_spp_states.csv", row.names=FALSE)
+write.csv(spp2, paste("results/",project_name,"_spp_states.csv", sep=""), row.names=FALSE)
 
 ## This function collects the analysis for parallel analysis.
 ## X is a list element consisting of a 1-row dataframe whose
@@ -88,7 +88,7 @@ if (!calculate.parallel) {
   cat("starting species response calculations")
   s=splist[1]
   for (s in splist) {
-    sp_csv=paste("spp_csvs/",s,"_csv.csv", sep="")
+    sp_csv=paste("spp_csvs/",project_name,"_",s,"_csv.csv", sep="")
     if (file.exists(sp_csv) & !overwrite_ps){
       jnk <- read.csv(sp_csv, stringsAsFactors=FALSE)
       out.data[s, ]=jnk[1:ncols]

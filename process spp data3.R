@@ -7,7 +7,7 @@ rm(list=ls())
 ## to true as well
 
 ## working directory
-server=TRUE
+server=FALSE
 if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
@@ -17,18 +17,18 @@ if (server){
 }
 setwd(wd)
 
-project_name="unknownfactors_equalweights_wpriors"
+project_name="unknwnfacs_eqwgts_priors"
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
-add.spp.to.GeNIe.model <- TRUE # this step could reasonably be skipped
-create.catnet.model <- TRUE
+add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
+create.catnet.model <- FALSE
 calculate.conditional.ps <- TRUE
 sp_list_offset=NULL #c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
-csv_out_data="results/selected_spp_vulnerability_scores.csv"
+csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
 overwrite_ps= FALSE
 ## calculate conditional probabilities using local-socket parallel
 ## processes? If cores is left at NULL, attempt to use only as
@@ -36,8 +36,9 @@ overwrite_ps= FALSE
 ## script will print timestamps and other diagnostics about what
 ## is going on. Set noisy to 0 to shut things up.
 calculate.parallel <- FALSE
-do_correl_analyses= FALSE
-config_file="config_file4.r"
+merge_all_results_and_data=FALSE
+do_correl_analyses= TRUE
+config_file=NULL#"config_file4.r"
 
 if (!is.null(config_file)){
   source(paste(code_loc,config_file, sep=""))
@@ -67,7 +68,7 @@ sppinterest.file <- "spinterest.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
-model.file <- "conceptual_model05_unknownfactors_equalweights_wpriors.xdsl"
+model.file <- "conceptual_model05_unknownfactors_equalweights_priors.xdsl"
 
 ## A sample model file to use when adding cases to the GeNIe model.
 ## I usually generate this by deleting all cases from the current
@@ -78,11 +79,13 @@ model.file <- "conceptual_model05_unknownfactors_equalweights_wpriors.xdsl"
 model.file.in <- "conceptual_model05_unknownfactors_equalweights_priors_template.xdsl"
 
 ## this is the file name to use for the output GeNIe model
-model.file.out <- "test.out.xdsl"
+model.file.out <- paste(project_name,"_test_out.xdsl", sep="")
 
 ## After the GIS data has been categorized for each species,
 ## save it out to this .csv file
-cat.data.file <- "qrld.csv"
+cat.data.file <- paste(project_name, "_qrld.csv",sep="")
+uncat.data.file <- paste(project_name, "_rld.csv",sep="")
+
 
 ## These are the node values we are intested in. Note that
 ## "Resist" is the model node name usually interpreted as
@@ -112,21 +115,20 @@ n3cat <- function(noisy, ...) {
 noisy <- 1
 if (categorize.GIS.data) {
   n2cat(noisy, "Categorizing input data.\n")
-  #ntimestamp(noisy)
+  ntimestamp(noisy)
   source(paste(code_loc,"categorize5.R", sep=""))
-  #ntimestamp(noisy)
+  ntimestamp(noisy)
 }
 
 if (calc_priors){
-  source(paste(code_loc,"calc priors.R", sep=""))  
-  
+  source(paste(code_loc,"calc priors.R", sep=""))    
 }
 noisy <- 3
 if (add.spp.to.GeNIe.model) {
   n2cat(noisy, "Adding cases to GeNIe model.\n")
-  #ntimestamp(noisy)
+  ntimestamp(noisy)
   source(paste(code_loc,"add cases to GeNIe.R", sep=""))
-  #ntimestamp(noisy)
+  ntimestamp(noisy)
 }
 if (create.catnet.model) {
   ntimestamp(noisy)
@@ -138,6 +140,11 @@ if (calculate.conditional.ps) {
   ## much progress reporting is done within "calculate conditional ps.R"
   source(paste(code_loc,"calculate conditional ps3.R", sep=""))
 }
-if (do_correl_analyses){
-  source(paste(code_loc,"correls.R", sep=""))
+if (merge_all_results_and_data){
+  source(paste(code_loc,"merge_all_data.R", sep=""))
 }
+if (do_correl_analyses){
+  source(paste(code_loc,"correls3.R", sep=""))
+}
+
+
