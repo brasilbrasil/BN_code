@@ -22,14 +22,14 @@ categorize.GIS.data <- FALSE
 calc_priors= FALSE
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
-create_factor_mean_table=TRUE
+create_factor_mean_table=FALSE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- FALSE
-merge_all_results_and_data=TRUE
-expert_comparison=TRUE
-do_correl_analyses= TRUE
-create_response_histograms=TRUE
+merge_all_results_and_data=FALSE
+expert_comparison=FALSE
+do_correl_analyses= FALSE
+create_response_histograms=FALSE
 vulnerability_contrasts=TRUE
 
 

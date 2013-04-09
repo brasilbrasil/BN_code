@@ -31,8 +31,11 @@ for (ttemp_var in ttemp_vars){
     }            
   }
 }
-#mean_res_table=mean_res_table[vlist$table_vars==TRUE,]
-#sd_res_table=sd_res_table[vlist$table_vars==TRUE,]
+table_vars=vlist$graph_name[vlist$table_vars==TRUE]
+jnk=rownames(mean_res_table)
+jnk=jnk %in% table_vars
+mean_res_table=mean_res_table[jnk,]
+sd_res_table=sd_res_table[jnk,]
 write.csv(mean_res_table, paste(project_name, "_factor_table_means.csv",sep=""), row.names=TRUE)
 write.csv(sd_res_table, paste(project_name, "_factor_table_sds.csv",sep=""), row.names=TRUE)
 
