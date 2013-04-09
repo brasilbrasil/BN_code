@@ -27,9 +27,9 @@ add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- FALSE
 merge_all_results_and_data=TRUE
-expert_comparison=FALSE
-do_correl_analyses= FALSE
-create_response_histograms=FALSE
+expert_comparison=TRUE
+do_correl_analyses= TRUE
+create_response_histograms=TRUE
 vulnerability_contrasts=TRUE
 
 
