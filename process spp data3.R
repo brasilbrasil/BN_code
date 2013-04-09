@@ -22,6 +22,7 @@ categorize.GIS.data <- FALSE
 calc_priors= FALSE
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
+create_factor_mean_table=TRUE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- FALSE
@@ -124,6 +125,14 @@ if (categorize.GIS.data) {
   source(paste(code_loc,"categorize5.R", sep=""))
   ntimestamp(noisy)
 }
+
+if (create_factor_mean_table) {
+  n2cat(noisy, "Creating factor mean table.\n")
+  ntimestamp(noisy)
+  source(paste(code_loc,"make_factor_table.r", sep=""))
+  ntimestamp(noisy)
+}
+
 
 if (calc_priors){
   source(paste(code_loc,"calc priors.R", sep=""))    
