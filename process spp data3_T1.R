@@ -5,7 +5,6 @@ rm(list=ls())
 ## In general each step is dependent upon its predecessors, so if you
 ## set a step to TRUE, you should probably set the steps before it
 ## to true as well
-#requires catnet, xml (install.packages("XML", repos = "http://www.omegahat.org/R"))
 
 ## working directory
 server=TRUE
@@ -34,8 +33,8 @@ create_response_histograms=FALSE
 vulnerability_contrasts=FALSE
 
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
-sp_list_offset=c(1,10)# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
-revert_sp_order=FALSE
+sp_list_offset=NULL #c(400,1000) #to turn off, put NULL #sp_list_offset=NULL
+revert_sp_order=TRUE
 csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
 overwrite_ps= FALSE
 ## calculate conditional probabilities using local-socket parallel

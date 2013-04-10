@@ -110,7 +110,7 @@ if (!calculate.parallel) {
       out.data[s,"vulnerability"]=(1-((as.double(out.data[s,"Resist"])+as.double(out.data[s,"Migrate"]))/2))*(1-as.double(out.data[s,"Micro_refugia"]))  
       out.data[s,"additive"]=((1-((as.double(out.data[s,"Resist"])+as.double(out.data[s,"Migrate"]))/2))+(1-as.double(out.data[s,"Micro_refugia"])))/2  
       #out.data[s,"transformed"]=acos(1-as.double(out.data[s,"vulnerability"]))/(0.5*pi) #old transformation
-      out.data[s,"transformed"]=asin(as.double(out.data[s,"vulnerability"]))^(1/3))*2/pi
+      out.data[s,"transformed"]=(asin(as.double(out.data[s,"vulnerability"]))^(1/3))*2/pi
       
       jnk=out.data[s,1:ncols]
       write.csv(jnk, sp_csv, row.names=FALSE)
