@@ -18,7 +18,7 @@ if (server){
 }
 setwd(wd)
 
-project_name="unknwnfacs_eqwgts_priors_traitsoff"
+project_name="unknwnfacs_eqwgts_priors_max_habqual"
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
