@@ -38,10 +38,16 @@ splist <- spp$sp_name[spp$sp_name %in% spin]
 #splist <- splist[1:3]
 if (!is.null(sp_list_offset)){
   splist=splist[sp_list_offset[1]:sp_list_offset[2]]
-  
 }
 if (revert_sp_order){
   splist=rev(splist)
+}
+if (n_instances>0 & cpucores>1){
+  #n_instances=1
+  jnkn=length(splist)
+  jnk=seq(1,jnkn,round(jnkn/cpucores,0))
+  jnk=c(jnk,jnkn)
+  splist=splist[jnk[n_instances]:jnk[n_instances+1]]
 }
 
 ## trim the amount of data needed for each pass though by eliminating

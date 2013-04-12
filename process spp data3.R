@@ -33,8 +33,9 @@ do_correl_analyses= FALSE
 create_response_histograms=FALSE
 vulnerability_contrasts=FALSE
 
+
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
-sp_list_offset=c(1,10)# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
+sp_list_offset=NULL# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
 csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
 overwrite_ps= FALSE
@@ -45,6 +46,10 @@ overwrite_ps= FALSE
 ## is going on. Set noisy to 0 to shut things up.
 calculate.parallel <- FALSE
 config_file=NULL#"config_file4.r"
+
+n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
+cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
+
 
 if (!is.null(config_file)){
   source(paste(code_loc,config_file, sep=""))
