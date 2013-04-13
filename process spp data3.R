@@ -18,7 +18,7 @@ if (server){
 }
 setwd(wd)
 
-project_name="unknwnfacs_eqwgts_priors_max_habqual"
+project_name="unknwnfacs_eqwgts_priors" #_min_habqual
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
@@ -28,6 +28,7 @@ add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- TRUE
 merge_all_results_and_data=FALSE
+do_tables=FALSE
 expert_comparison=FALSE
 do_correl_analyses= FALSE
 create_response_histograms=FALSE
@@ -161,6 +162,10 @@ if (calculate.conditional.ps) {
 }
 if (merge_all_results_and_data){
   source(paste(code_loc,"merge_all_data.R", sep=""))
+}
+
+if (do_tables){
+  source(paste(code_loc,"do_tables.R", sep=""))
 }
 
 if (expert_comparison){
