@@ -20,8 +20,8 @@ for (var in vars){
     all_combined_file=paste("results/",run,"_all_combined.csv", sep="")
     all_combined=read.csv(all_combined_file, stringsAsFactors=FALSE)
     if (run==runs[1]){
-      temp_var=as.data.frame(all_combined[,"spp"])
-      names(temp_var)="Species"
+      temp_var=as.data.frame(all_combined[,c("spp", "sp_code", "FAMILY")])
+      names(temp_var)=c("Species", "code", "FAMILY")
     }
     
     jnk=as.data.frame(all_combined[,var])
@@ -32,5 +32,8 @@ for (var in vars){
   }
   temp_var=cbind(temp_var, dmaxHabqual=temp_var[,"standard"]-temp_var[,"max_hab_qual"])
   temp_var=cbind(temp_var, dminHabqual=temp_var[,"min_hab_qual"]-temp_var[,"standard"])
+  temp_var=cbind(temp_var, propdminHabqual=temp_var[,"dminHabqual"]/temp_var[,"standard"])
+  temp_var=cbind(temp_var, propdmaxHabqual=temp_var[,"dmaxHabqual"]/temp_var[,"standard"])
   assign(var,temp_var)
 }
+write.csv(temp_var, paste0("results/min_max_hab_qual_table.csv"), row.names=FALSE)

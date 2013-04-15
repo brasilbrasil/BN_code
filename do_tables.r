@@ -122,4 +122,65 @@ if (rows*2<n){
 }
 write.csv(genus_table_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
+#spp most benefitting from hab qual increases
+name="spp_w_largest_decrease_in_vuln_with_hab_qual_increase"
+rows=20
+csv_data="results/min_max_hab_qual_table.csv"
+min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
+most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdmaxHabqual")]
+most_vuln_spp=most_vuln_spp[order(most_vuln_spp$standard, decreasing = TRUE),]
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Decrease in vulnerability")
+most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
+#spp most harmed by  hab qual decreases
+name="spp_w_largest_increase_in_vuln_with_hab_qual_decrease"
+rows=20
+csv_data="results/min_max_hab_qual_table.csv"
+min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
+most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdminHabqual")]
+most_vuln_spp=most_vuln_spp[order(most_vuln_spp$standard, decreasing = TRUE),]
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Increase in vulnerability")
+most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
+
+
+#families most benefitting from hab qual increases
+name="families_w_largest_decrease_in_vuln_with_hab_qual_increase"
+rows=20
+csv_data="results/min_max_hab_qual_table.csv"
+min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
+most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdmaxHabqual")]
+n=dim(most_vuln_spp)[1]
+most_vuln_spp=cbind(most_vuln_spp,Temp=rep(1,n,1), Count=rep(1,n,1))
+group_n=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="Count", sum)
+group_mean=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="standard", mean)
+group_sd=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="propdmaxHabqual", mean)
+family_table=cbind(group_n, group_mean[,2],group_sd[,2])
+names(family_table)=c("Family","n","Mean","Change")
+family_table[is.na(family_table)]="-"
+family_table=family_table[order(family_table$Change,decreasing=TRUE),]
+family_table=family_table[family_table$n>=min_n,]
+rows=20
+family_table_selection=family_table[1:rows,] 
+write.csv(family_table_selection, paste0("tables/", name,".csv"), row.names=FALSE)
+
+#families most harmed by hab qual decreases
+name="families_w_largest_decrease_in_vuln_with_hab_qual_increase"
+rows=20
+csv_data="results/min_max_hab_qual_table.csv"
+min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
+most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdminHabqual")]
+n=dim(most_vuln_spp)[1]
+most_vuln_spp=cbind(most_vuln_spp,Temp=rep(1,n,1), Count=rep(1,n,1))
+group_n=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="Count", sum)
+group_mean=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="standard", mean)
+group_sd=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="propdminHabqual", mean)
+family_table=cbind(group_n, group_mean[,2],group_sd[,2])
+names(family_table)=c("Family","n","Mean","Change")
+family_table[is.na(family_table)]="-"
+family_table=family_table[order(family_table$Change,decreasing=TRUE),]
+family_table=family_table[family_table$n>=min_n,]
+rows=20
+family_table_selection=family_table[1:rows,] 
+write.csv(family_table_selection, paste0("tables/", name,".csv"), row.names=FALSE)

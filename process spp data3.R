@@ -71,7 +71,7 @@ data.file <- "allspp.csv"
 ## specify which quantiles to use in assigning categories
 ## (default is to use median for two categories, 1st and 3rd
 ## quartiles for 3 categories)
-variables.file <- "variables_no_lava.csv"
+variables.file <- "variables.csv"
 
 ## a table with a column "Species" containing the species we
 ## want to add cases for. GeNIe bogs down with too many cases, and

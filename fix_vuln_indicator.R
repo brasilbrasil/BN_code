@@ -25,8 +25,7 @@ splist <- spp$sp_name[spp$sp_name %in% spin]
 ## splist <- "Sophora chrysophylla"
 #splist <- splist[1:3]
 if (!is.null(sp_list_offset)){
-  splist=splist[sp_list_offset[1]:sp_list_offset[2]]
-  
+  splist=splist[sp_list_offset[1]:sp_list_offset[2]]  
 }
 if (revert_sp_order){
   splist=rev(splist)
