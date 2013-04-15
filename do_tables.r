@@ -12,22 +12,23 @@ all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
 vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
 
 #MOST/LEAST VULNERABLE SPP
+name="most_least_vuln_spp"
 rows=10
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed")]
 most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed),]
 names(most_vuln_spp)=c("Species","Family", "Vulnerability")
 n=dim(most_vuln_spp)[1]
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,],c("...","...","..."),most_vuln_spp[(n-rows):(n),])
-
-fileConn<-file("tables/HTML_table.html")
-writeLines(print(xtable(most_vuln_spp_selection), type="html"), fileConn)
-close(fileConn)
-
-fileConn<-file("tables/HTML_table.txt")
-writeLines(print(xtable(most_vuln_spp_selection), type="latex"), fileConn)
-close(fileConn)
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
+# fileConn<-file("tables/HTML_table.html")
+# writeLines(print(xtable(most_vuln_spp_selection), type="html"), fileConn)
+# close(fileConn)
+# fileConn<-file("tables/HTML_table.txt")
+# writeLines(print(xtable(most_vuln_spp_selection), type="latex"), fileConn)
+# close(fileConn)
 
 #MOST VULNERABLE SPP WITH FCES
+name="most_least_vuln_spp_w_FCEs"
 rows=20
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout")]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==0,c("spp","FAMILY","transformed")]
@@ -35,19 +36,23 @@ most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),
 names(most_vuln_spp)=c("Species","Family", "Vulnerability")
 n=dim(most_vuln_spp)[1]
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
 #print(xtable(most_vuln_spp_selection), type="html")
 #print(xtable(most_vuln_spp_selection), floating=FALSE)
 
 #all Winkout spp 
+name="winkout_spp"
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$Status.simplified!="Extinct",]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==1,c("spp","FAMILY","transformed")]
 #most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),]
 names(most_vuln_spp)=c("Species","Family", "Vulnerability")
 most_vuln_spp_selection=most_vuln_spp
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
 #all no-overlap spp 
+name="no_overlap_spp"
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout","CE_overlap", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$Status.simplified!="Extinct",]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==0,]
@@ -55,9 +60,11 @@ most_vuln_spp=most_vuln_spp[most_vuln_spp$CE_overlap==0,c("spp","FAMILY","transf
 #most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),]
 names(most_vuln_spp)=c("Species","Family", "Vulnerability")
 most_vuln_spp_selection=most_vuln_spp
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
 
 #MOST VULNERABLE NON-LISTED SPP
+name="most_vuln_not_listed_spp"
 rows=20
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$Status.simplified=="Apparently Secure",c("spp","FAMILY","transformed")]
@@ -65,12 +72,14 @@ most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),
 names(most_vuln_spp)=c("Species","Family", "Vulnerability")
 n=dim(most_vuln_spp)[1]
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
+write.csv(most_vuln_spp_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
 library(reshape2)
 library(plyr)
 
 min_n=5
 #least/most vulnerable families
+name="most_least_vuln_families"
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed")]
 n=dim(most_vuln_spp)[1]
 most_vuln_spp=cbind(most_vuln_spp,Temp=rep(1,n,1), Count=rep(1,n,1))
@@ -89,8 +98,10 @@ if (rows*2<n){
 }else{
   family_table_selection=family_table
 }
+write.csv(family_table_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
 #least/most vulnerable genera
+name="most_least_vuln_genera"
 most_vuln_spp=all_combined[,c("spp","GENUS","transformed")]
 n=dim(most_vuln_spp)[1]
 most_vuln_spp=cbind(most_vuln_spp,Temp=rep(1,n,1), Count=rep(1,n,1))
@@ -109,5 +120,6 @@ if (rows*2<n){
 }else{
   genus_table_selection=genus_table
 }
+write.csv(genus_table_selection, paste0("tables/", name,".csv"), row.names=FALSE)
 
 

@@ -18,7 +18,7 @@ if (server){
 }
 setwd(wd)
 
-project_name="unknwnfacs_eqwgts_priors" #_min_habqual
+project_name="unknwnfacs_eqwgts_priors" #_min_habqual _traitsoff
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
 plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
@@ -27,7 +27,7 @@ create_factor_mean_table=FALSE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- TRUE
-merge_all_results_and_data=FALSE
+merge_all_results_and_data=TRUE
 do_tables=FALSE
 expert_comparison=FALSE
 do_correl_analyses= FALSE
@@ -186,5 +186,3 @@ if (vulnerability_contrasts){
   dir.create("comparisons/",showWarnings=FALSE)
   source(paste(code_loc,"vulnerability_contrasts7.r", sep=""))
 }
-
-

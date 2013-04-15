@@ -181,7 +181,7 @@ if (!calculate.parallel) {
   out.data=out.data2
   out.data[,"vulnerability"]=(1-((as.double(as.character(out.data[,"Resist"]))+as.double(as.character(out.data[,"Migrate"])))/2))*(1-as.double(as.character(out.data[,"Micro_refugia"])))  
   out.data[,"additive"]=((1-((as.double(as.character(out.data[,"Resist"]))+as.double(as.character(out.data[,"Migrate"])))/2))+(1-as.double(as.character(out.data[,"Micro_refugia"]))))/2  
-  out.data[,"transformed"]=acos(1-as.double(as.character(out.data[,"vulnerability"])))/(0.5*pi)  
+  out.data[,"transformed"]=asin(as.double(out.data[s,"vulnerability"]))^(1/3)*2/pi  
   write.csv(out.data, csv_out_data, row.names=FALSE)
 }
 
