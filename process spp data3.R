@@ -8,7 +8,7 @@ rm(list=ls())
 #requires catnet, xml (install.packages("XML", repos = "http://www.omegahat.org/R"))
 
 ## working directory
-server=TRUE
+server=FALSE
 if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
