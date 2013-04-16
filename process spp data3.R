@@ -51,10 +51,10 @@ config_file=NULL#"config_file4.r"
 n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
 
-
 if (!is.null(config_file)){
   source(paste(code_loc,config_file, sep=""))
 }
+
 cores <- NULL
 noisy <- 3
 
