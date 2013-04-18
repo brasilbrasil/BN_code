@@ -14,7 +14,7 @@ for (i in 2:3){
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
   
-  plot(rank(vul_data[,i]), rank(vul_data[,4]), xlab=jnk, ylab="Ranked expert score")
+  plot(rank(vul_data[,i]), rank(vul_data[,4]), xlab="Model vulnerability rank", ylab="Expert vulnerability rank")
   
   dev.off()  
 }
@@ -26,7 +26,7 @@ for (i in 2:3){
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
   
-  plot(vul_data[,i], vul_data[,4], xlab=jnk, ylab="Expert score")
+  plot(vul_data[,i], vul_data[,4], xlab="Model vulnerability", ylab="Mean expert vulnerability")
   
   dev.off()  
 }

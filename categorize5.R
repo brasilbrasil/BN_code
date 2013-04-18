@@ -92,7 +92,8 @@ plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
         
   abline(v=q, col = "red")
   text(xpos,ypos,lv, pos=4)
-  title(v)
+  #title(v)
+  title("")
   dev.off()  
   return()
 }
@@ -130,7 +131,8 @@ plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty,
   
   abline(v=q, col = "red")
   text(xpos,ypos,lv, pos=4)
-  title(v)
+  #title(v)
+  title("")
   
   legend('topright',temp_legends, #inset=0.05, ###DEBUG USE INSET ARGUMENT
          fill = temp_colors, bty = 'n',

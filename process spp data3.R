@@ -21,7 +21,7 @@ setwd(wd)
 project_name="unknwnfacs_eqwgts_priors" #_min_habqual _traitsoff
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
-plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
+plot_hist = TRUE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
 create_factor_mean_table=FALSE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
@@ -33,7 +33,6 @@ expert_comparison=FALSE
 do_correl_analyses= FALSE
 create_response_histograms=FALSE
 vulnerability_contrasts=FALSE
-
 
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 sp_list_offset=NULL# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
