@@ -182,14 +182,25 @@ example_spp=frame_rounding(example_spp)
 write.csv(example_spp, paste0("tables/", project_name, "_", name,".csv"), row.names=FALSE)
 
 
+#
+csv_data="results/min_max_hab_qual_table.csv"
+min_max_table=read.csv(csv_data, stringsAsFactors=FALSE)
+n=dim(min_max_table)[1]
+min_max_table=cbind(min_max_table,Temp=rep(1,n,1), Count=rep(1,n,1))
+median_standard_vul=median(min_max_table$standard)
+high_standard=sum(min_max_table[min_max_table$standard>median_standard_vul, "Count"])
+high_maxQual=sum(min_max_table[min_max_table$max_hab_qual>median_standard_vul, "Count"])
+high_minQual=sum(min_max_table[min_max_table$min_hab_qual>median_standard_vul, "Count"])
+
+
 #spp most benefitting from hab qual increases
 name="spp_w_largest_decrease_in_vuln_with_hab_qual_increase"
 rows=20
 csv_data="results/min_max_hab_qual_table.csv"
-min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
+median_standard_vul=median(min_max_hab_qual_table$standard)
 most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdmaxHabqual")]
-most_vuln_spp=most_vuln_spp[order(most_vuln_spp$standard, decreasing = TRUE),]
-names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Decrease in vulnerability")
+most_vuln_spp=most_vuln_spp[order(most_vuln_spp$propdmaxHabqual, decreasing = TRUE),]
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "% decrease in vulnerability")
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
 write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".csv"), row.names=FALSE)
@@ -200,8 +211,8 @@ rows=20
 csv_data="results/min_max_hab_qual_table.csv"
 min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
 most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdminHabqual")]
-most_vuln_spp=most_vuln_spp[order(most_vuln_spp$standard, decreasing = TRUE),]
-names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Increase in vulnerability")
+most_vuln_spp=most_vuln_spp[order(most_vuln_spp$propdminHabqual, decreasing = TRUE),]
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "% increase in vulnerability")
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
 write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".csv"), row.names=FALSE)
@@ -219,9 +230,9 @@ group_n=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="Count", sum)
 group_mean=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="standard", mean)
 group_sd=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="propdmaxHabqual", mean)
 family_table=cbind(group_n, group_mean[,2],group_sd[,2])
-names(family_table)=c("Family","n","Mean","Change")
+names(family_table)=c("Family","n","Mean","% Change")
 family_table[is.na(family_table)]="-"
-family_table=family_table[order(family_table$Change,decreasing=TRUE),]
+family_table=family_table[order(family_table$"% Change",decreasing=TRUE),]
 family_table=family_table[family_table$n>=min_n,]
 rows=20
 family_table_selection=family_table[1:rows,] 
@@ -240,9 +251,9 @@ group_n=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="Count", sum)
 group_mean=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="standard", mean)
 group_sd=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="propdminHabqual", mean)
 family_table=cbind(group_n, group_mean[,2],group_sd[,2])
-names(family_table)=c("Family","n","Mean","Change")
+names(family_table)=c("Family","n","Mean","% Change")
 family_table[is.na(family_table)]="-"
-family_table=family_table[order(family_table$Change,decreasing=TRUE),]
+family_table=family_table[order(family_table$"% Change",decreasing=TRUE),]
 family_table=family_table[family_table$n>=min_n,]
 rows=20
 family_table_selection=family_table[1:rows,] 
@@ -303,12 +314,44 @@ for (fct in factor_order_table){
   jnk=vlist$ET_name[jnk0]
   temp_index=c(temp_index,jnk)
 }
-#factor_order_table=vlist$ET_name[vlist$graph_name %in% factor_order_table]
 all=all[factor_order_table,c(1,5,2,6,3,7,4,8)]
 all[c('Envelope overlap', 'Winkout', 'Persistence in invaded landscape', 'Pioneer species'),"S.d. all zones"]=""
-
 rownames(all)=temp_index
 all=frame_rounding(all)
 all[is.na(all)]=""
 all[all==0]=""
 write.csv(all, paste("tables/", project_name, "_factor_table.csv",sep=""), row.names=TRUE)
+
+
+##vulnerability of listed endemic dicots vs all else
+most_vuln_spp=all_combined#[,c("spp","GENUS","transformed")]
+most_vuln_spp=cbind(most_vuln_spp,Temp=rep(1,dim(most_vuln_spp)[1]), 
+                    Count=rep(1,dim(most_vuln_spp)[1]),selected=rep(0,dim(most_vuln_spp)[1]))
+most_vuln_spp[most_vuln_spp$Status.simplified!="Apparently Secure" & 
+                most_vuln_spp$Native.Status=="Endemic" &
+                most_vuln_spp$DIVISION=="Dicot", "selected"]=1
+group_n=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="Count", sum)
+group_mean=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", mean)
+group_sd=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", sd)
+
+##vulnerability of listed single island endemic dicots vs all else
+most_vuln_spp=all_combined#[,c("spp","GENUS","transformed")]
+island=c("Ha","Ma", "Ka", "Oa", "Mo", "La", "Ke", "Ni")
+island_vals=all_combined[,island]
+island_vals[island_vals>0]=1
+island=rowSums(island_vals)
+island=island==1
+most_vuln_spp=cbind(most_vuln_spp,Temp=rep(1,dim(most_vuln_spp)[1]), 
+                    Count=rep(1,dim(most_vuln_spp)[1]),selected=rep(0,dim(most_vuln_spp)[1]))
+most_vuln_spp[most_vuln_spp$Status.simplified!="Apparently Secure" & 
+                island &
+                most_vuln_spp$DIVISION=="Dicot", "selected"]=1
+group_n=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="Count", sum)
+group_mean=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", mean)
+group_sd=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", sd)
+
+# most_vuln_spp$Status.simplified!="Apparently Secure"
+# most_vuln_spp$Native.Status=="Endemic"
+# most_vuln_spp$DIVISION=="Dicot"
+# most_vuln_spp$Pioneer==0
+# most_vuln_spp$Alien_hab_comp==0

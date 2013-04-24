@@ -1,7 +1,7 @@
 ## working directory
 
 cor_order="original" #"AOE"
-n_dep_vars=11 #must be at end of var list
+#n_dep_vars=11 #must be at end of var list
 
 #first_and_last_discr_var=c(85:169)
 csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
@@ -21,6 +21,9 @@ vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
 vlist0 <- vlist[vlist$correl==TRUE,]
 vlist0 <- vlist0[order(vlist0$type),]
 vlist=vlist0$Variable
+n_dep_vars=sum(vlist0$type=="5_Dependent")
+
+
 
 ## simplify all_combined to contain only variables associated with nodes
 ## (and sp_name and sp_code)
@@ -59,10 +62,19 @@ if (length(which(uniq_var_types==""))>0){
 uniq_var_type = uniq_var_types[4]
 for (uniq_var_type in uniq_var_types){
   sub_vars=vlist0$node_names[vlist0$type==uniq_var_type]
+  names_clean=vlist0$ET_name[vlist0$type==uniq_var_type]
+  names_zones=vlist0$ET_zone[vlist0$type==uniq_var_type]
+  for (jjj in 1:length(names_clean)){
+    if (names_zones[jjj]!=""){
+      names_clean[jjj]=paste(names_clean[jjj],"in", names_zones[jjj], "zone")      
+    }
+  }
+  
   sub_jnk=all_combined[,sub_vars]
   if (any(!is.finite(sub_jnk$"Distance between current and future suitable range"))){
     sub_jnk$"Distance between current and future suitable range"[!is.finite(sub_jnk$"Distance between current and future suitable range")]=max(sub_jnk$"Distance between current and future suitable range")    
   }
+  names(sub_jnk)=names_clean
   #plot(sub_jnk$"Ugly habitat (MRF zone)", sub_jnk$"Current envelope area")
   #cor(sub_jnk$"Ugly habitat (MRF zone)", sub_jnk$"Current envelope area", use="complete.obs")
   #jnk_p <- cor.mtest(sub_jnk,0.95)
@@ -86,10 +98,20 @@ uniq_var_types=uniq_var_types[-which(uniq_var_types=="")]
 uniq_var_type = uniq_var_types[1]
 for (uniq_var_type in uniq_var_types){
   sub_vars=vlist0$node_names[vlist0$type2==uniq_var_type]
+  names_clean=vlist0$ET_name[vlist0$type2==uniq_var_type]
+  names_zones=vlist0$ET_zone[vlist0$type2==uniq_var_type]
+  for (jjj in 1:length(names_clean)){
+    if (names_zones[jjj]!=""){
+      names_clean[jjj]=paste(names_clean[jjj],"in", names_zones[jjj], "zone")      
+    }
+  }
+  
   sub_jnk=all_combined[,sub_vars]
   if (any(!is.finite(sub_jnk$"Distance between current and future suitable range"))){
     sub_jnk$"Distance between current and future suitable range"[!is.finite(sub_jnk$"Distance between current and future suitable range")]=max(sub_jnk$"Distance between current and future suitable range")    
   }  
+  names(sub_jnk)=names_clean
+  
   jnk=cor(sub_jnk, use="complete.obs")
   jpeg_name=paste("correls/",  project_name, "_correls_",uniq_var_type,".jpg", sep="")
   jpeg(jpeg_name,
@@ -105,7 +127,35 @@ for (uniq_var_type in uniq_var_types){
 ##############CORELS LIMITED#################
 
 jnk0_ind=all_combined[,3:(dim(all_combined)[2]-n_dep_vars)]
-jnk00=all_combined[,(dim(all_combined)[2]-(n_dep_vars-1)):dim(all_combined)[2]]
+temp_vars=vlist[1:(length(vlist)-n_dep_vars)]
+names_clean=c()
+temp_var=temp_vars[1]
+for (temp_var in temp_vars){
+  name_zones=vlist0$ET_zone[vlist0$Variable == temp_var]
+  name_clean=vlist0$ET_name[vlist0$Variable == temp_var]
+  if (name_zones!=""){
+    names_clean=c(names_clean,paste(name_clean,"in", name_zones, "zone"))
+  }else{
+    names_clean=c(names_clean, name_clean)
+  }
+}
+names(jnk0_ind)=names_clean
+
+jnk00=all_combined[,(dim(all_combined)[2]-n_dep_vars+1):dim(all_combined)[2]]
+temp_vars=vlist[(length(vlist)-n_dep_vars+1):length(vlist)]
+names_clean=c()
+temp_var=temp_vars[1]
+for (temp_var in temp_vars){
+  name_zones=vlist0$ET_zone[vlist0$Variable == temp_var]
+  name_clean=vlist0$ET_name[vlist0$Variable == temp_var]
+  if (name_zones!=""){
+    names_clean=c(names_clean,paste(name_clean,"in", name_zones, "zone"))
+  }else{
+    names_clean=c(names_clean, name_clean)
+  }
+}
+names(jnk00)=names_clean
+
 jnk=cor(jnk0_ind,jnk00, use="complete.obs")
 
 #label="correls_responses_and_vuln"
