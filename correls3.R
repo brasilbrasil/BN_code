@@ -83,9 +83,11 @@ for (uniq_var_type in uniq_var_types){
   jpeg(jpeg_name,
        width = 8, height = 8, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
-#  corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.6, tl.srt=45, 
+#  corrplot(jnk, order=cor_order, method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=0.6, tl.srt=45, 
 #           p.mat = jnk_p[[1]], sig.level=0.01, insig = "blank", addCoef.col="black", addCoefasPercent = TRUE)
-  corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.6, tl.srt=45, 
+  par(oma = c(0, 12, 0, 4))
+  par(xpd=NA)
+  corrplot(jnk, order=cor_order, method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=0.6, tl.srt=45, 
            addCoef.col="black", addCoefasPercent = TRUE,
            p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")  
   dev.off()    
@@ -117,7 +119,9 @@ for (uniq_var_type in uniq_var_types){
   jpeg(jpeg_name,
        width = 8, height = 8, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
-  corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.6, tl.srt=45, 
+  par(oma = c(0, 12, 0, 4))
+  par(xpd=NA)
+  corrplot(jnk, order=cor_order, method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=0.6, tl.srt=45, 
            addCoef.col="black", addCoefasPercent = TRUE,
            p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")    
   dev.off()    
@@ -163,7 +167,7 @@ jnk=cor(jnk0_ind,jnk00, use="complete.obs")
 #jpeg(jpeg_name,
 #     width = 3, height = 8, units = "in",
 #     pointsize = 12, quality = 90, bg = "white", res = 300)
-#corrplot(jnk, order="original", method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.4, tl.srt=45)
+#corrplot(jnk, order="original", method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=0.4, tl.srt=45)
 #dev.off()    
 avg=rowMeans(jnk[,1:3])
 #jnk=cbind(jnk,avg)
@@ -178,7 +182,9 @@ jpeg_name=paste("correls/", project_name, "_", label,".jpg", sep="")
 jpeg(jpeg_name,
      width = 8, height = 8, units = "in",
      pointsize = 12, quality = 90, bg = "white", res = 300)
-corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.6, tl.srt=45, 
+par(oma = c(0, 12, 0, 4))
+par(xpd=NA)
+corrplot(jnk, order=cor_order, method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=0.6, tl.srt=45, 
          addCoef.col="black", addCoefasPercent = TRUE,
          p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")  
 dev.off()    
@@ -191,7 +197,7 @@ write.csv(jnk, paste("correls/",  project_name, "_correl_independents_matrix.csv
 # jpeg(jpeg_name,
 #      width = 8, height = 8, units = "in",
 #      pointsize = 12, quality = 90, bg = "white", res = 300)
-# corrplot(jnk, order="AOE", method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=1, tl.srt=45)
+# corrplot(jnk, order="AOE", method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=1, tl.srt=45)
 # dev.off()    
 # write.csv(jnk, "correls/correl_dependents_matrix.csv", row.names=TRUE)
 
@@ -202,7 +208,9 @@ jpeg_name=paste("correls/", project_name, "_", label,".jpg", sep="")
 jpeg(jpeg_name,
      width = 8, height = 8, units = "in",
      pointsize = 12, quality = 90, bg = "white", res = 300)
-corrplot(jnk, order="original", method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=1, tl.srt=45, 
+par(oma = c(0, 12, 0, 4))
+par(xpd=NA)
+corrplot(jnk, order="original", method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=1, tl.srt=45, 
          addCoef.col="black", addCoefasPercent = TRUE,
          p.mat = 1-abs(jnk), sig.level=0.50, insig = "blank")  
 dev.off()    
@@ -216,69 +224,71 @@ jpeg_name=paste("correls/", project_name, "_", label,".jpg", sep="")
 jpeg(jpeg_name,
      width = 8, height = 8, units = "in",
      pointsize = 12, quality = 90, bg = "white", res = 300)
-corrplot(jnk, order=cor_order, method="circle", tl.pos="lt", type="upper", tl.col="black", tl.cex=0.4, tl.srt=45)
+par(oma = c(0, 12, 0, 4))
+par(xpd=NA)
+corrplot(jnk, order=cor_order, method="circle", tl.pos="ld", type="lower", tl.col="black", tl.cex=0.4, tl.srt=45)
 dev.off()    
 
 write.csv(jnk, paste("correls/",  project_name, "_correl_correl_matrix.csv",sep=""), row.names=TRUE)
 
 
-# #############PCA#####################
-jnk00=jnk0_ind[complete.cases(jnk0_ind),]
-#jnk00=jnk0[,1:(dim(jnk0)[2]-4)]
-
-pc <- princomp(jnk00)
-print(summary(pc))
-
-label="pca_biplot"
-jpeg_name=paste("correls/",  project_name, "_", label,".jpg", sep="")
-jpeg(jpeg_name,
-     width = 8, height = 8, units = "in",
-     pointsize = 12, quality = 90, bg = "white", res = 300)
-biplot(pc)
-dev.off()    
-
-label="pca_screeplot"
-jpeg_name=paste("correls/",  project_name, "_", label,".jpg", sep="")
-jpeg(jpeg_name,
-     width = 4, height = 4, units = "in",
-     pointsize = 12, quality = 90, bg = "white", res = 300)
-screeplot(pc, npcs = 3, main="")
-dev.off()
-
-
-
-# #############NMDS#####################
-dist=distance(jnk00, "sorensen")
-
-iris.nmds <- nmds(dist, mindim=2, maxdim=2, nits=3)
-iris.nmin <- nmds.min(iris.nmds)
-
-# Plot NMDS result with symbols denoting species
-label="NMDS_results"
-jpeg_name=paste("correls/",  project_name, "_", label,".jpg", sep="")
-jpeg(jpeg_name,
-     width = 8, height = 8, units = "in",
-     pointsize = 12, quality = 90, bg = "white", res = 300)
-plot(iris.nmin)
-dev.off()
-
-# # Fit vectors for the main variables to the NMDS configuration
-# iris.vf <- vf(iris.nmin, jnk00, nperm=10)
-# label="NMDS_w_vars"
-# jpeg_name=paste("correls/", label,".jpg", sep="")
+# # #############PCA#####################
+# jnk00=jnk0_ind[complete.cases(jnk0_ind),]
+# #jnk00=jnk0[,1:(dim(jnk0)[2]-4)]
+# 
+# pc <- princomp(jnk00)
+# print(summary(pc))
+# 
+# label="pca_biplot"
+# jpeg_name=paste("correls/",  project_name, "_", label,".jpg", sep="")
 # jpeg(jpeg_name,
 #      width = 8, height = 8, units = "in",
 #      pointsize = 12, quality = 90, bg = "white", res = 300)
-# plot(iris.vf, col="blue")
+# biplot(pc)
 # dev.off()    
-
-
-##PCA wrt vulnerability
-#pc <- princomp(jnk000~jnk00)
-
-# #############3D plot###############
-#with(foo, plot3d(mr, tol, mg))
-# #with(foo, spheres3d(mr, tol, mg, color=rangecol, radius=0.01))
-# with(foo, spheres3d(mr, tol, mg, color=elevcol, radius=0.01))
-# with(foo, text3d(mr, tol, mg, spp))
 # 
+# label="pca_screeplot"
+# jpeg_name=paste("correls/",  project_name, "_", label,".jpg", sep="")
+# jpeg(jpeg_name,
+#      width = 4, height = 4, units = "in",
+#      pointsize = 12, quality = 90, bg = "white", res = 300)
+# screeplot(pc, npcs = 3, main="")
+# dev.off()
+# 
+# 
+# 
+# # #############NMDS#####################
+# dist=distance(jnk00, "sorensen")
+# 
+# iris.nmds <- nmds(dist, mindim=2, maxdim=2, nits=3)
+# iris.nmin <- nmds.min(iris.nmds)
+# 
+# # Plot NMDS result with symbols denoting species
+# label="NMDS_results"
+# jpeg_name=paste("correls/",  project_name, "_", label,".jpg", sep="")
+# jpeg(jpeg_name,
+#      width = 8, height = 8, units = "in",
+#      pointsize = 12, quality = 90, bg = "white", res = 300)
+# plot(iris.nmin)
+# dev.off()
+# 
+# # # Fit vectors for the main variables to the NMDS configuration
+# # iris.vf <- vf(iris.nmin, jnk00, nperm=10)
+# # label="NMDS_w_vars"
+# # jpeg_name=paste("correls/", label,".jpg", sep="")
+# # jpeg(jpeg_name,
+# #      width = 8, height = 8, units = "in",
+# #      pointsize = 12, quality = 90, bg = "white", res = 300)
+# # plot(iris.vf, col="blue")
+# # dev.off()    
+# 
+# 
+# ##PCA wrt vulnerability
+# #pc <- princomp(jnk000~jnk00)
+# 
+# # #############3D plot###############
+# #with(foo, plot3d(mr, tol, mg))
+# # #with(foo, spheres3d(mr, tol, mg, color=rangecol, radius=0.01))
+# # with(foo, spheres3d(mr, tol, mg, color=elevcol, radius=0.01))
+# # with(foo, text3d(mr, tol, mg, spp))
+# # 

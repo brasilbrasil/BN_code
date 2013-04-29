@@ -63,9 +63,9 @@ write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".c
 name="winkout_spp"
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$Status.simplified!="Extinct",]
-most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==1,c("spp","FAMILY","transformed")]
+most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==1,c("spp","FAMILY","transformed", "Status.simplified")]
 #most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),]
-names(most_vuln_spp)=c("Species","Family", "Vulnerability")
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Conservation status")
 most_vuln_spp_selection=most_vuln_spp
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
 write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".csv"), row.names=FALSE)
@@ -75,9 +75,9 @@ name="no_overlap_spp"
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout","CE_overlap", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$Status.simplified!="Extinct",]
 most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==0,]
-most_vuln_spp=most_vuln_spp[most_vuln_spp$CE_overlap==0,c("spp","FAMILY","transformed")]
+most_vuln_spp=most_vuln_spp[most_vuln_spp$CE_overlap==0,c("spp","FAMILY","transformed", "Status.simplified")]
 #most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),]
-names(most_vuln_spp)=c("Species","Family", "Vulnerability")
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Conservation status")
 most_vuln_spp_selection=most_vuln_spp
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
 write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".csv"), row.names=FALSE)

@@ -1,5 +1,6 @@
 require(XML)
 library(ggplot2)
+polish_thresholds=TRUE
 
 if (plot_hist){
   out_graph_dir=paste(wd, "graphs/", sep="")
@@ -74,7 +75,7 @@ plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
-  hist(x, main="", breaks = 25, xlab=graph_xlabel)
+  hist(x, main="", breaks = 50, xlab=graph_xlabel)
   axis(1)
   yax <- axis(2, lty=0, labels=FALSE)
   ymax=max(yax)
@@ -297,7 +298,7 @@ if (plot_hist){
     vs <- vlist$Variable[which(vlist$Node %in% vars_to_plot)]
     minVs=min(rld[, vs],na.rm=T)
     maxVs=max(rld[, vs],na.rm=T)
-    breaks=seq(minVs,maxVs,(maxVs-minVs)/25)
+    breaks=seq(minVs,maxVs,(maxVs-minVs)/50)
     n = vars_to_plot[1]
     for (n in vars_to_plot) {
       node.id <- which(nodes %in% n)
@@ -347,6 +348,13 @@ if (plot_hist){
       r=hist(rld[, v], main="", breaks = breaks)
       lines(r, lty = 3, border = "purple")
       assign(temp_hist,r)
+      if (polish_thresholds){
+        for (threshold in thresholds){
+          jnk=c(r$breaks)
+          jnk_dist=abs(jnk-as.numeric(threshold))    
+          thresholds[thresholds==threshold]=r$breaks[which(jnk_dist==min(jnk_dist))]          
+        }
+      }
       
       temp_hists=c(temp_hists, temp_hist)
       temp_colors=c(temp_colors,hist_colors[graph_zone])
@@ -431,6 +439,14 @@ for (n in datanodes) {
     assign("thresholds", temp_res[[2]])
     rm("temp_res")
     qrld[, n] = quant_data 
+    if (polish_thresholds){
+      r=hist(rld[, v], main="", breaks = 50, xlab=graph_xlabel)
+      for (threshold in thresholds){
+        jnk=c(r$breaks)
+        jnk_dist=abs(jnk-as.numeric(threshold))    
+        thresholds[thresholds==threshold]=r$breaks[which(jnk_dist==min(jnk_dist))]          
+      }
+    }    
     if (plot_hist){
       plot_hist_fx(node_name, rld[, v],thresholds,categories,graph_xlabel)
     }
@@ -461,6 +477,14 @@ for (n in datanodes) {
     rm("temp_res")
     qrld[, n] = quant_data 
     if (plot_hist){
+      if (polish_thresholds){
+        r=hist(rld[, v], main="", breaks = 50, xlab=graph_xlabel)
+        for (threshold in thresholds){
+          jnk=c(r$breaks)
+          jnk_dist=abs(jnk-as.numeric(threshold))    
+          thresholds[thresholds==threshold]=r$breaks[which(jnk_dist==min(jnk_dist))]          
+        }
+      }    
       plot_hist_fx(node_name, rld[, v],thresholds,categories,graph_xlabel)
     }
     rm(quant_data, thresholds, b)
@@ -489,6 +513,14 @@ for (n in datanodes) {
     rm("temp_res")
     qrld[, n] = quant_data 
     if (plot_hist){
+      if (polish_thresholds){
+        r=hist(rld[, v], main="", breaks = 50, xlab=graph_xlabel)
+        for (threshold in thresholds){
+          jnk=c(r$breaks)
+          jnk_dist=abs(jnk-as.numeric(threshold))    
+          thresholds[thresholds==threshold]=r$breaks[which(jnk_dist==min(jnk_dist))]          
+        }
+      }    
       plot_hist_fx(node_name, rld[, v],thresholds,categories,graph_xlabel)
     }
     rm(quant_data, thresholds, b)

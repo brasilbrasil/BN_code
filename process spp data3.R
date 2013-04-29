@@ -21,7 +21,7 @@ setwd(wd)
 project_name="unknwnfacs_eqwgts_priors" #_min_habqual _traitsoff
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
-plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
+plot_hist = TRUE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
 create_factor_mean_table=FALSE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
