@@ -75,6 +75,7 @@ plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
+  par(xpd=NA)
   hist(x, main="", breaks = 50, xlab=graph_xlabel)
   axis(1)
   yax <- axis(2, lty=0, labels=FALSE)
@@ -90,9 +91,9 @@ plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
   ypos=ypos[xpos<=xmax]
   lv=lv[xpos<=xmax]
   xpos=xpos[xpos<=xmax]
-        
-  abline(v=q, col = "red")
   text(xpos,ypos,lv, pos=4)
+  par(xpd=FALSE)
+  abline(v=q, col = "red")
   #title(v)
   title("")
   dev.off()  
@@ -104,6 +105,7 @@ plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty,
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
+  par(xpd=NA)
   for (jkj in 1:length(temp_hists)){
     color=temp_colors[jkj]
     ltyy=temp_lty[jkj]
@@ -130,8 +132,9 @@ plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty,
   lv=lv[xpos<=xmax]
   xpos=xpos[xpos<=xmax]
   
-  abline(v=q, col = "red")
   text(xpos,ypos,lv, pos=4)
+  par(xpd=FALSE)
+  abline(v=q, col = "red")
   #title(v)
   title("")
   
@@ -148,6 +151,7 @@ plot_multi_hist_fx2 <- function(v, x, q, lv, temp_colors, temp_legends, graph_xl
        width = 5, height = 5, units = "in",
        pointsize = 12, quality = 90, bg = "white", res = 300)
   plot.new()
+  par(xpd=NA)
   ggplot(x, aes(gg_vals, fill = gg_zone)) + geom_bar(pos="dodge")
   
   dev.off()  
@@ -387,7 +391,7 @@ qrld$sp_code <- rld$sp_code
 
 ## loop through the model nodes, identify associated variables, categorize
 ## them as appropriate and store the results in the qrld dataframe
-n=datanodes[8]
+n=datanodes[32]
 for (n in datanodes) {
   node.id <- which(nodes %in% n)
   if (length(node.id) != 1)

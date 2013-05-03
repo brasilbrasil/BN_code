@@ -44,6 +44,9 @@ names(group_n)[jnk]="Species count"
 group_n <- data.frame(lapply(group_n, as.character), stringsAsFactors=FALSE)
 group_n[group_n=="H"]='High'
 group_n[group_n=="L"]='Low'
+jnk=as.numeric(group_n[,"Species.count"])
+jnk=order(jnk,decreasing=TRUE)
+group_n[jnk,]
 write.csv(group_n, paste("tables/",  project_name, "_vulnerability_syndromes.csv", sep=""), row.names=TRUE)
 
 # #these here calculate the binary relationship among variables- show how area and distribution is related
