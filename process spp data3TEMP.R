@@ -18,18 +18,18 @@ if (server){
 }
 setwd(wd)
 
-project_name="unknwnfacs_eqwgts_priors_thirddispersion" # _thirddispersion #_min_habqual _traitsoff
+project_name="unknwnfacs_expertwgts_priors" # _thirddispersion #_min_habqual _traitsoff
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
-plot_hist = TRUE ##if categorizing data, this switch controls whether histograms of all model
+plot_hist = FALSE ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
 create_factor_mean_table=FALSE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
-calculate.conditional.ps <- TRUE
-merge_all_results_and_data=FALSE
+calculate.conditional.ps <- FALSE
+merge_all_results_and_data=TRUE
 do_tables=FALSE
-expert_comparison=FALSE
+expert_comparison=TRUE
 do_correl_analyses= FALSE
 create_response_histograms=FALSE
 vulnerability_contrasts=FALSE
@@ -75,11 +75,11 @@ variables.file <- "variables.csv"
 ## a table with a column "Species" containing the species we
 ## want to add cases for. GeNIe bogs down with too many cases, and
 ## sometimes we'll only want updates for a subset of species
-sppinterest.file <- "spinterest.csv"
+sppinterest.file <- "spinterest_test_sp.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
-model.file <- "conceptual_model05_unknownfactors_equalweights_priors_thirddispersion.xdsl"
+model.file <- "conceptual_model05_unknownfactors_expertweights_priors.xdsl"
 
 ## A sample model file to use when adding cases to the GeNIe model.
 ## I usually generate this by deleting all cases from the current
@@ -87,7 +87,7 @@ model.file <- "conceptual_model05_unknownfactors_equalweights_priors_thirddisper
 ## "delete me" to avoid species name collisions)
 ## Right now the code needs a blank, unpopulated GeNiE model
 ## with a single placeholder case
-model.file.in <- "conceptual_model05_unknownfactors_equalweights_priors_thirddispersion_template.xdsl"
+model.file.in <- "conceptual_model05_unknownfactors_expertweights_priors_template.xdsl"
 
 ## this is the file name to use for the output GeNIe model
 model.file.out <- paste(project_name,"_test_out.xdsl", sep="")

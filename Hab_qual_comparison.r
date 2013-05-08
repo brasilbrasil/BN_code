@@ -3,12 +3,12 @@ if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
 }else{
-  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template/"
-  code_loc="C:/Users/lfortini/code/BN_code/"
+  wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template/" #C:\Users\lfortini\Dropbox\USGS\Science\0-ongoing\VAs\HI spp VA\BN vulnerability\Full Process template
+  code_loc="C:/Users/lfortini/Dropbox/code/BN_code/"
 }
 setwd(wd)
 
-runs=c("unknwnfacs_eqwgts_priors","unknwnfacs_eqwgts_priors_max_habqual", "unknwnfacs_eqwgts_priors_min_habqual")  #_min_habqual
+runs=c("unknwnfacs_eqwgts_priors_thirddispersion","unknwnfacs_eqwgts_priors_thirddispersion_max_habqual", "unknwnfacs_eqwgts_priors_thirddispersion_min_habqual")  #_min_habqual
 run_type=c("standard", "max_hab_qual", "min_hab_qual")
 vars=c("transformed")
 

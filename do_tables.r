@@ -30,9 +30,9 @@ frame_rounding=function(frame){
 #MOST/LEAST VULNERABLE SPP
 name="most_least_vuln_spp"
 rows=10
-most_vuln_spp=all_combined[,c("spp","FAMILY","transformed")]
+most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed),]
-names(most_vuln_spp)=c("Species","Family", "Vulnerability")
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Conservation status")
 n=dim(most_vuln_spp)[1]
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,],c("...","...","..."),most_vuln_spp[(n-rows):(n),])
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
@@ -47,10 +47,10 @@ write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".c
 #MOST VULNERABLE SPP WITH FCES
 name="most_least_vuln_spp_w_FCEs"
 rows=20
-most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout")]
-most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==0,c("spp","FAMILY","transformed")]
+most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "winkout", "Status.simplified")]
+most_vuln_spp=most_vuln_spp[most_vuln_spp$winkout==0,c("spp","FAMILY","transformed", "Status.simplified")]
 most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),]
-names(most_vuln_spp)=c("Species","Family", "Vulnerability")
+names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Conservation status")
 n=dim(most_vuln_spp)[1]
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
@@ -188,6 +188,8 @@ min_max_table=read.csv(csv_data, stringsAsFactors=FALSE)
 n=dim(min_max_table)[1]
 min_max_table=cbind(min_max_table,Temp=rep(1,n,1), Count=rep(1,n,1))
 median_standard_vul=median(min_max_table$standard)
+cat("median vulnerability score is", "\n")
+median_standard_vul
 high_standard=sum(min_max_table[min_max_table$standard>median_standard_vul, "Count"])
 high_maxQual=sum(min_max_table[min_max_table$max_hab_qual>median_standard_vul, "Count"])
 high_minQual=sum(min_max_table[min_max_table$min_hab_qual>median_standard_vul, "Count"])
@@ -349,6 +351,19 @@ most_vuln_spp[most_vuln_spp$Status.simplified!="Apparently Secure" &
 group_n=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="Count", sum)
 group_mean=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", mean)
 group_sd=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", sd)
+
+tmp=cbind(all_combined, count=matrix(1, dim(all_combined)[1],1),group=matrix(0, dim(all_combined)[1],1))
+tmp[tmp$DIVISION=="Dicot","group"]=1
+tmp[tmp$Status.simplified!="Apparently Secure","group"]=1
+tmp[tmp$Native.Status=="Endemic","group"]=1
+
+tmp[tmp$DIVISION=="Dicot" & tmp$Status.simplified!="Apparently Secure" & tmp$Native.Status=="Endemic","group"]=1
+cat("vulnerability for species with characteristics associated with vuln is", "\n")
+aggregate(transformed ~ group, data=tmp, FUN=mean)
+
+cat("area lost by slr for coastal species is", "\n")
+aggregate(MRzone_slr ~ Coastal, data=tmp, FUN=mean)
+
 
 # most_vuln_spp$Status.simplified!="Apparently Secure"
 # most_vuln_spp$Native.Status=="Endemic"

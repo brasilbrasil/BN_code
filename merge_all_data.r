@@ -54,4 +54,32 @@ for (sp in all_species){
   }
   i=i+1
 }
+
+#island endemics
+islands=c("Ha", "Ma", "Ka", "Oa", "Mo", "La", "Ke", "Ni")
+jnk=all_combined[,islands]
+jnk[jnk>0]=1
+jnk=rowSums(jnk)
+jnk0=matrix("No",dim(all_combined)[1],1)
+jnk0[jnk==1]="Yes"
+all_combined=cbind(all_combined, island_endemic=jnk0)
+
+jnk=all_combined$transformed
+jnk0=rank(-jnk)
+jnk1=max(jnk0)
+rel_rank_vul=jnk0/jnk1
+rank_cat_vuln=ceiling(rel_rank_vul*10)*10
+
+all_combined=cbind(all_combined, rel_rank_vul, rank_cat_vuln)
+
+# island=islands[1]
+# i=1
+# for (island in islands){
+#   jnk=temp_data[,i]
+#   jnk[jnk>0]=island
+#   jnk[jnk<=0]="na"
+#   temp_data[,i]=jnk
+#   i=i+1  
+# }
+
 write.csv(all_combined, all_combined_file, row.names=TRUE)

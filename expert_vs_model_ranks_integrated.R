@@ -32,5 +32,5 @@ for (i in 2:3){
 }
 
 ##To calculate r values  
-#r=cor(rank(vul_data[,2]), rank(vul_data[,4]))
+r=cor(rank(vul_data[,2]), rank(vul_data[,4]))
 #rsq=r^2 
