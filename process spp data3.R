@@ -13,7 +13,8 @@ if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
 }else{
-  wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template/" #C:\Users\lfortini\Dropbox\USGS\Science\0-ongoing\VAs\HI spp VA\BN vulnerability\Full Process template
+  wd <- "C:/Users/lfortini/Dropbox/current work/USGS Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template"
+  #wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template/" #C:\Users\lfortini\Dropbox\USGS\Science\0-ongoing\VAs\HI spp VA\BN vulnerability\Full Process template
   code_loc="C:/Users/lfortini/Dropbox/code/BN_code/"
 }
 setwd(wd)

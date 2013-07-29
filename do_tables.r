@@ -4,6 +4,8 @@ variables.file="variables.csv"
 dir.create("tables/",showWarnings=FALSE)
 
 require(xtable)
+library(reshape2)
+library(plyr)
 ## load un-categorized data
 all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
 #all_combined=all_combined[,-first_and_last_discr_var]
@@ -31,7 +33,7 @@ frame_rounding=function(frame){
 name="most_least_vuln_spp"
 rows=10
 most_vuln_spp=all_combined[,c("spp","FAMILY","transformed", "Status.simplified")]
-most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed),]
+most_vuln_spp=most_vuln_spp[order(most_vuln_spp$transformed, decreasing = TRUE),]
 names(most_vuln_spp)=c("Species","Family", "Vulnerability", "Conservation status")
 n=dim(most_vuln_spp)[1]
 most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,],c("...","...","..."),most_vuln_spp[(n-rows):(n),])
@@ -95,9 +97,6 @@ most_vuln_spp_selection=rbind(most_vuln_spp[1:rows,])
 most_vuln_spp_selection=frame_rounding(most_vuln_spp_selection)
 write.csv(most_vuln_spp_selection, paste0("tables/", project_name, "_", name,".csv"), row.names=FALSE)
 
-library(reshape2)
-library(plyr)
-
 min_n=5
 #least/most vulnerable families
 name="most_least_vuln_families"
@@ -110,7 +109,7 @@ group_sd=dcast(most_vuln_spp,  FAMILY  ~  Temp,  value.var="transformed", sd)
 family_table=cbind(group_n, group_mean[,2],group_sd[,2])
 names(family_table)=c("Family","n","Mean","S.d.")
 family_table[is.na(family_table)]="-"
-family_table=family_table[order(family_table$Mean),]
+family_table=family_table[order(family_table$Mean, decreasing = TRUE),]
 family_table=family_table[family_table$n>=min_n,]
 rows=10
 n=dim(family_table)[1]
@@ -133,7 +132,7 @@ group_sd=dcast(most_vuln_spp,  GENUS  ~  Temp,  value.var="transformed", sd)
 genus_table=cbind(group_n, group_mean[,2],group_sd[,2])
 names(genus_table)=c("Genus","n","Mean","S.d.")
 genus_table[is.na(genus_table)]="-"
-genus_table=genus_table[order(genus_table$Mean),]
+genus_table=genus_table[order(genus_table$Mean, decreasing = TRUE),]
 genus_table=genus_table[genus_table$n>=min_n,]
 rows=10
 n=dim(genus_table)[1]
@@ -199,6 +198,7 @@ high_minQual=sum(min_max_table[min_max_table$min_hab_qual>median_standard_vul, "
 name="spp_w_largest_decrease_in_vuln_with_hab_qual_increase"
 rows=20
 csv_data="results/min_max_hab_qual_table.csv"
+min_max_hab_qual_table=read.csv(csv_data, stringsAsFactors=FALSE)
 median_standard_vul=median(min_max_hab_qual_table$standard)
 most_vuln_spp=min_max_hab_qual_table[,c("Species","FAMILY","standard", "propdmaxHabqual")]
 most_vuln_spp=most_vuln_spp[order(most_vuln_spp$propdmaxHabqual, decreasing = TRUE),]
@@ -353,13 +353,14 @@ group_mean=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", me
 group_sd=dcast(most_vuln_spp,  selected  ~  Temp,  value.var="transformed", sd)
 
 tmp=cbind(all_combined, count=matrix(1, dim(all_combined)[1],1),group=matrix(0, dim(all_combined)[1],1))
-tmp[tmp$DIVISION=="Dicot","group"]=1
-tmp[tmp$Status.simplified!="Apparently Secure","group"]=1
-tmp[tmp$Native.Status=="Endemic","group"]=1
+#tmp[tmp$DIVISION=="Dicot","group"]=1
+#tmp[tmp$Status.simplified!="Apparently Secure","group"]=1
+#tmp[tmp$Native.Status=="Endemic","group"]=1
 
 tmp[tmp$DIVISION=="Dicot" & tmp$Status.simplified!="Apparently Secure" & tmp$Native.Status=="Endemic","group"]=1
+sum(tmp$group)
 cat("vulnerability for species with characteristics associated with vuln is", "\n")
-aggregate(transformed ~ group, data=tmp, FUN=mean)
+aggregate(transformed ~ group, data=tmp, FUN=median)
 
 cat("area lost by slr for coastal species is", "\n")
 aggregate(MRzone_slr ~ Coastal, data=tmp, FUN=mean)
@@ -370,3 +371,244 @@ aggregate(MRzone_slr ~ Coastal, data=tmp, FUN=mean)
 # most_vuln_spp$DIVISION=="Dicot"
 # most_vuln_spp$Pioneer==0
 # most_vuln_spp$Alien_hab_comp==0
+
+####MAKE TOOL AUX DATA
+csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
+variables.file="variables.csv"
+vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
+vlist0=vlist
+Abs_q5levels <- function(x, q=c(0.2, 0.4, 0.6, 0.8), lv=c("Very_small", "Small", "Medium", "Large", "Very_large")) {
+  quant_data <- rep(lv[3], length(x))
+  quant_data[is.na(x)] <- "none"
+  quant_data[x < rep(q[2], length(x))] <- lv[2]
+  quant_data[x < rep(q[1], length(x))] <- lv[1]
+  quant_data[x > rep(q[3], length(x))] <- lv[4]
+  quant_data[x > rep(q[4], length(x))] <- lv[5]    
+  return(quant_data)}
+
+
+header_cols=c('spp', 'sp_code', 'DIVISION', 'FAMILY', 'GENUS', 'Status.simplified', 'Native.Status', 'Coastal', 'Ha', 'Ma', 'Ka', 'Oa', 'Mo', 'La', 'Ke', 'Ni', 'dominant_cover', 'cover1', 'cover2', 'cover3', 'CCE_Area', 'transformed', 'Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+header_cols_names=c('spp', 'sp_code', 'Division', 'Family', 'Genus', 'Consv_stat', 'Native_stat', 'Coastal', 'Ha_pres', 'Ma_pres', 'Ka_pres', 'Oa_pres', 'Mo_pres', 'La_pres', 'Ke_pres', 'Ni_pres', 'Cover_D', 'Cover_1', 'Cover_2', 'Cover_3', 'CCE_Area', 'Vulnerability', 'Tolerate', 'Migrate', 'Micro_refugia', 'Eff_Mrf_A', 'Eff_Tol_A', 'Eff_Mig_A', 'Habqual_Mrg', 'Habqual_Tol', 'Habqual_Mig', 'Dispersion')
+vlist=vlist[which(vlist$tool_order!="NA"),]
+vlist=vlist[order(vlist$tool_order),]
+node_names=vlist$Tool_name_short
+node_cols=vlist$Node
+jnkk=node_cols
+jnkk1=c()
+for (jnk in jnkk){
+  jnk=paste0("node_",jnk)
+  jnkk1=c(jnkk1, jnk)
+}
+node_cols=jnkk1
+
+aux_data0=all_combined[,header_cols]
+
+vars=c('Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+for (var in vars){
+  jnk=aux_data0[,var]
+  #jnk_med=median(jnk)
+  #cat("median for ",var, " is ",jnk_med, "\n")   
+  #jnk <- ifelse(jnk > jnk_med, "H.", "L.")
+  jnk=Abs_q5levels(jnk)
+  aux_data0[,var]=jnk
+  #jnk=dim(data_resps_discr)[2]
+  #names(data_resps_discr)[jnk]=paste0(var, "_cat")
+}
+names(aux_data0)=c(header_cols_names)
+
+##
+aux_data1=all_combined[,node_cols]
+names(aux_data1)=c(node_names)
+
+##average_condition
+hab_area=c('Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area')
+hab_qual=c('Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual')
+#headers=c('spp',  'sp_code',  'shpcode', 'DIVISION', 'FAMILY', 'GENUS','SPECIES')
+
+##qual, area and distr
+#data_resps=all_combined[,headers]
+jnk=rowMeans(all_combined[,hab_qual])
+jnk1=rowMeans(all_combined[,hab_area])
+data_resps=cbind(Quality=jnk,Area=jnk1)
+data_resps=as.data.frame(data_resps)
+vars=c("Quality","Area")
+data_resps_discr=data_resps
+var=vars[1]
+
+for (var in vars){
+  jnk=data_resps[,var]
+  jnk_med=median(jnk)
+  jnk=Abs_q5levels(jnk)
+  data_resps_discr[,var]=jnk
+  jnk=which(names(data_resps_discr)==var)
+  names(data_resps_discr)[jnk]=paste0(var, "_avg")
+}
+
+#node_cols %in% names(all_combined) 
+aux_data=cbind(aux_data0, data_resps_discr, aux_data1)
+#names(aux_data)=c(header_cols_names, node_names)
+isl_col=c('Ha_pres', 'Ma_pres', 'Ka_pres', 'Oa_pres', 'Mo_pres', 'La_pres', 'Ke_pres', 'Ni_pres')
+jnk=aux_data[, isl_col]
+jnk[jnk>0]=1
+aux_data[, isl_col]=jnk
+write.csv(aux_data, paste("results/",  project_name, "_tool_aux_data.csv", sep=""), row.names=TRUE)
+auxcols=colnames(aux_data)
+auxcols_desc=rep("",length(auxcols))
+
+#auxcol = auxcols[5]
+#auxcol = auxcols[40]
+#auxcol = auxcols[33]
+i=1
+for (auxcol in auxcols){
+  if (auxcol %in% header_cols_names){
+    jnk=which(header_cols_names==auxcol)
+    auxcol=header_cols[jnk]
+    jnkvar=which(vlist0$Variable==auxcol)
+  }else{
+    jnk=which(node_names==auxcol)
+    jnkvar=vlist$Variable[jnk]
+    jnkvar=which(vlist0$Variable==jnkvar)  
+  }
+  if (length(jnkvar)>0){
+    jnk=vlist0$ET_name[jnkvar]
+    jnk1=vlist0$ET_zone[jnkvar]
+    if (jnk1!=""){
+      jnk=paste(jnk,"in",jnk1, "zone")
+    }
+    auxcols_desc[i]=jnk
+  }else{
+    #auxcols_desc[]=vlist0$ET_name[jnkvar]
+  }
+  i=i+1
+}
+all_names=cbind(auxcols, auxcols_desc)
+write.csv(all_names, paste("results/",  project_name, "_tool_aux_data_col_description.csv", sep=""), row.names=FALSE)
+#node_names=vlist$Tool_name_short
+
+###APPENDIX ALL SPP VULNERABILITIES!
+csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
+variables.file="variables.csv"
+vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
+
+# Abs_q5levels <- function(x, q=c(0.2, 0.4, 0.6, 0.8), lv=c("Very_small", "Small", "Medium", "Large", "Very_large")) {
+#   quant_data <- rep(lv[3], length(x))
+#   quant_data[is.na(x)] <- "none"
+#   quant_data[x < rep(q[2], length(x))] <- lv[2]
+#   quant_data[x < rep(q[1], length(x))] <- lv[1]
+#   quant_data[x > rep(q[3], length(x))] <- lv[4]
+#   quant_data[x > rep(q[4], length(x))] <- lv[5]    
+#   return(quant_data)}
+
+#all no duplicates
+# header_cols=c('spp', 'DIVISION', 'FAMILY', 'Status.simplified', 'Native.Status', 'Coastal', 'cover1',  'CCE_Area', 'transformed', 'Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+# header_cols_names=c('spp', 'Division', 'Family', 'Consv_stat', 'Native_stat', 'Coastal', 'Cover_1',  'CCE_Area', 'Vulnerability', 'Tolerate', 'Migrate', 'Micro_refugia', 'Eff_Mrf_A', 'Eff_Tol_A', 'Eff_Mig_A', 'Habqual_Mrg', 'Habqual_Tol', 'Habqual_Mig', 'Dispersion')
+#shorter with duplicates 
+#header_cols=c('spp', 'transformed', 'transformed','Resist','Resist', 'Migrate','Migrate', 'Micro_refugia','Micro_refugia', 'Effective_MRF_area','Effective_MRF_area', 'Effective_Tol_zone_area','Effective_Tol_zone_area', 'Effective_Mig_area', 'Effective_Mig_area','Habitat_qual_MRF','Habitat_qual_MRF', 'Tol_Zone_Habitat_qual','Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion', 'Dispersion')
+#header_cols_names=c('Species', 'Vulnerability', 'Rank_Vulnerability','Tolerate','Q_Tolerate', 'Migrate','Q_Migrate', 'Micro_refugia','Q_Micro_refugia', 'Eff_Mrf_A','Q_Eff_Mrf_A', 'Eff_Tol_A', 'Q_Eff_Tol_A','Q_Eff_Mig_A','Q_Eff_Mig_A', 'Habqual_Mrf', 'Q_Habqual_Mrf','Habqual_Tol','Q_Habqual_Tol', 'Habqual_Mig', 'Q_Habqual_Mig','Dispersion', 'Q_Dispersion')
+
+header_cols=c('spp', 'transformed', 'Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+header_cols_names=c('Species', 'Vulnerability', 'Tolerate', 'Migrate', 'Micro_refugia', 'Eff_Mrf_A', 'Eff_Tol_A', 'Eff_Mig_A', 'Habqual_Mrg', 'Habqual_Tol', 'Habqual_Mig', 'Dispersion')
+
+# vlist=vlist[which(vlist$tool_order!="NA"),]
+# vlist=vlist[order(vlist$tool_order),]
+# node_names=vlist$Tool_name_short
+# node_cols=vlist$Node
+# jnkk=node_cols
+# jnkk1=c()
+# for (jnk in jnkk){
+#   jnk=paste0("node_",jnk)
+#   jnkk1=c(jnkk1, jnk)
+# }
+# node_cols=jnkk1
+
+aux_data0=all_combined[,header_cols]
+
+
+#vars=c('Resist.1', 'Migrate.1', 'Micro_refugia.1', 'Effective_MRF_area.1', 'Effective_Tol_zone_area.1', 'Effective_Mig_area.1', 'Habitat_qual_MRF.1', 'Tol_Zone_Habitat_qual.1', 'Mig_Zone_Habitat_qual.1', 'Dispersion.1')
+# for (var in vars){
+#   jnk=aux_data0[,var]
+#   #jnk_med=median(jnk)
+#   #cat("median for ",var, " is ",jnk_med, "\n")   
+#   #jnk <- ifelse(jnk > jnk_med, "H.", "L.")
+#   jnk=Abs_q5levels(jnk)
+#   aux_data0[,var]=jnk
+#   #jnk=dim(data_resps_discr)[2]
+#   #names(data_resps_discr)[jnk]=paste0(var, "_cat")
+# }
+
+vars=c('transformed','Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+for (var in vars){
+jnk=aux_data0[,var]
+jnk=rank(jnk)
+jnk1=max(jnk)
+jnk=jnk/jnk1
+aux_data0[,var]=jnk
+}
+names(aux_data0)=c(header_cols_names)
+
+# ##aux data
+# aux_data1=all_combined[,node_cols]
+# names(aux_data1)=c(node_names)
+# 
+# ##average_condition
+# hab_area=c('Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area')
+# hab_qual=c('Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual')
+# #headers=c('spp',  'sp_code',  'shpcode', 'DIVISION', 'FAMILY', 'GENUS','SPECIES')
+# 
+# ##qual, area and distr
+# #data_resps=all_combined[,headers]
+# jnk=rowMeans(all_combined[,hab_qual])
+# jnk1=rowMeans(all_combined[,hab_area])
+# data_resps=cbind(Quality=jnk,Area=jnk1)
+# data_resps=as.data.frame(data_resps)
+# vars=c("Quality","Area")
+# data_resps_discr=data_resps
+# var=vars[1]
+# 
+# for (var in vars){
+#   jnk=data_resps[,var]
+#   jnk_med=median(jnk)
+#   jnk=Abs_q5levels(jnk)
+#   data_resps_discr[,var]=jnk
+#   jnk=which(names(data_resps_discr)==var)
+#   names(data_resps_discr)[jnk]=paste0(var, "_avg")
+# }
+# 
+# #node_cols %in% names(all_combined) 
+# aux_data=cbind(aux_data0, data_resps_discr, aux_data1)
+# #names(aux_data)=c(header_cols_names, node_names)
+# isl_col=c('Ha_pres', 'Ma_pres', 'Ka_pres', 'Oa_pres', 'Mo_pres', 'La_pres', 'Ke_pres', 'Ni_pres')
+# jnk=aux_data[, isl_col]
+# jnk[jnk>0]=1
+# aux_data[, isl_col]=jnk
+#write.csv(aux_data, paste("tables/",  project_name, "_appendix10_all_spp_results.csv", sep=""), row.names=TRUE)
+aux_data0=frame_rounding(aux_data0)
+write.csv(aux_data0, paste("tables/",  project_name, "_appendix10_all_spp_results.csv", sep=""), row.names=FALSE)
+
+
+###APPENDIX ALL SPP VULNERABILITIES!
+csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
+variables.file="variables.csv"
+vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
+header_cols=c('spp', 'transformed', 'Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+header_cols_names=c('Species', 'Vulnerability', 'Tolerate', 'Migrate', 'Micro_refugia', 'Eff_Mrf_A', 'Eff_Tol_A', 'Eff_Mig_A', 'Habqual_Mrg', 'Habqual_Tol', 'Habqual_Mig', 'Dispersion')
+aux_data0=all_combined[,header_cols]
+
+#vars=c('transformed','Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
+vars=c('transformed')
+for (var in vars){
+  jnk=aux_data0[,var]
+  jnk=rank(jnk)
+  jnk1=max(jnk)
+  jnk=jnk/jnk1
+  aux_data0[,var]=jnk
+}
+names(aux_data0)=c(header_cols_names)
+
+aux_data0=frame_rounding(aux_data0)
+write.csv(aux_data0, paste("tables/",  project_name, "_appendix10_all_spp_results2.csv", sep=""), row.names=FALSE)
+
+

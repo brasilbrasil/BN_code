@@ -42,12 +42,115 @@ group_n=cbind(foo, group_n$Count)
 jnk=dim(group_n)[2]
 names(group_n)[jnk]="Species count"
 group_n <- data.frame(lapply(group_n, as.character), stringsAsFactors=FALSE)
+group_n0=group_n
 group_n[group_n=="H"]='High'
 group_n[group_n=="L"]='Low'
 jnk=as.numeric(group_n[,"Species.count"])
 jnk=order(jnk,decreasing=TRUE)
 group_n[jnk,]
 write.csv(group_n, paste("tables/",  project_name, "_vulnerability_syndromes.csv", sep=""), row.names=TRUE)
+
+####3 cat syndromes
+q3levels <- function(x, q=c(0.33, 0.66), lv=c("Low.", "Medium.", "High.")) {
+  y <- quantile(x, q, na.rm=TRUE)
+  y[y==min(x, na.rm = TRUE)]=min(x, na.rm = TRUE)+0.0001
+  y[y==max(x, na.rm = TRUE)]=max(x, na.rm = TRUE)-0.0001
+  thresholds=y
+  quant_data <- rep(lv[2], length(x))
+  quant_data[is.na(x)] <- "none"
+  quant_data[x < rep(y[1],length(x))] <- lv[1]
+  quant_data[x > rep(y[2],length(x))] <- lv[3]
+  return(quant_data)
+}
+
+data_resps=all_combined[,headers]
+jnk=rowMeans(all_combined[,hab_qual])
+jnk1=rowMeans(all_combined[,hab_area])
+data_resps=cbind(data_resps,Quality=jnk,Area=jnk1,Distribution=all_combined[,"Dispersion"],
+                 Vulnerability=all_combined[,"transformed"])
+vars=c("Quality","Area", "Distribution", "Vulnerability")
+data_resps_discr=data_resps
+var=vars[1]
+for (var in vars){
+  jnk=data_resps[,var]
+  jnk_med=median(jnk)
+  cat("median for ",var, " is ",jnk_med, "\n")   
+  jnk=q3levels(jnk)
+  data_resps_discr=cbind(data_resps_discr, jnk)
+  jnk=dim(data_resps_discr)[2]
+  names(data_resps_discr)[jnk]=paste0(var, "_cat")
+}
+jnk=dim(data_resps_discr)[1]
+data_resps_discr=cbind(data_resps_discr,Temp=matrix(1,jnk,1), Count=matrix(1,jnk,1))
+jnk=data_resps_discr[,c("Vulnerability_cat", "Quality_cat","Area_cat", "Distribution_cat")]
+merged=apply(jnk,1,paste,collapse="")
+data_resps_discr=cbind(data_resps_discr, Merged=merged)
+library(reshape2)
+library(plyr)
+group_n=dcast(data_resps_discr,  Merged ~  Temp,  value.var="Count", sum)
+names(group_n)=c("Syndrome", "Count")
+foo <- data.frame(do.call('rbind', strsplit(as.character(group_n$Syndrome),'.',fixed=TRUE)))
+names(foo)=c("Vulnerability", "Quality","Area", "Distribution")
+levels(foo)
+group_n=cbind(foo, group_n$Count)
+jnk=dim(group_n)[2]
+names(group_n)[jnk]="Species count"
+group_n <- data.frame(lapply(group_n, as.character), stringsAsFactors=FALSE)
+jnk=as.numeric(group_n[,"Species.count"])
+jnk=order(jnk,decreasing=TRUE)
+group_n[jnk,]
+write.csv(group_n, paste("tables/",  project_name, "_vulnerability_syndromes_3cat.csv", sep=""), row.names=TRUE)
+
+
+
+#2 category classification, no zon averaging
+q2levels <- function(x, q=0.5, lv=c("Low.", "High.")) {
+  y <- quantile(x, q, na.rm=TRUE)  
+  y[y==min(x, na.rm = TRUE)]=min(x, na.rm = TRUE)+0.0001
+  y[y==max(x, na.rm = TRUE)]=max(x, na.rm = TRUE)-0.0001
+  thresholds=y
+  quant_data <- rep(lv[1], length(x))
+  quant_data[is.na(x)] <- "none"
+  quant_data[x > rep(y,length(x))] <- lv[2]
+  return(quant_data)}
+all_factor_groups_plus_vuln=c("transformed", all_factor_groups)
+data_resps=all_combined[,all_factor_groups_plus_vuln]
+
+vars_nm=c("vulnerability","MR_area","TL_area","MG_area","MR_qual", "TL_qual", "MG_qual", "Distr")
+data_resps_discr=data_resps
+var=vars[1]
+i=1
+for (var in all_factor_groups_plus_vuln){
+  jnk=data_resps[,var]
+  jnk_med=median(jnk)
+  cat("median for ",var, " is ",jnk_med, "\n")   
+  jnk=q2levels(jnk)
+  data_resps_discr=cbind(data_resps_discr, jnk)
+  jnk=dim(data_resps_discr)[2]
+  names(data_resps_discr)[jnk]=vars_nm[i]
+  i=i+1
+}
+jnk=dim(data_resps_discr)[1]
+data_resps_discr=cbind(data_resps_discr,Temp=matrix(1,jnk,1), Count=matrix(1,jnk,1))
+jnk=data_resps_discr[,vars_nm]
+merged=apply(jnk,1,paste,collapse="")
+data_resps_discr=cbind(data_resps_discr, Merged=merged)
+library(reshape2)
+library(plyr)
+group_n=dcast(data_resps_discr,  Merged ~  Temp,  value.var="Count", sum)
+names(group_n)=c("Syndrome", "Count")
+foo <- data.frame(do.call('rbind', strsplit(as.character(group_n$Syndrome),'.',fixed=TRUE)))
+names(foo)=vars_nm
+levels(foo)
+group_n=cbind(foo, group_n$Count)
+jnk=dim(group_n)[2]
+names(group_n)[jnk]="Species count"
+group_n <- data.frame(lapply(group_n, as.character), stringsAsFactors=FALSE)
+jnk=as.numeric(group_n[,"Species.count"])
+jnk=order(jnk,decreasing=TRUE)
+group_n[jnk,]
+write.csv(group_n, paste("tables/",  project_name, "_vulnerability_syndromes_2cats_all_subfactors.csv", sep=""), row.names=TRUE)
+
 
 # #these here calculate the binary relationship among variables- show how area and distribution is related
 # group_n=dcast(data_resps_discr,  Quality_cat ~  Vulnerability_cat,  value.var="Count", sum)

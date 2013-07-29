@@ -1,10 +1,11 @@
 csv_out_data="model_vs_expert_blank.csv"
 exp_vul_data <- read.csv(csv_out_data, stringsAsFactors=FALSE)
 spp_to_compare=exp_vul_data$X
-csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
+#unknwnfacs_eqwgts_priors_thirddispersion_all_combined.csv
+csv_out_data=paste("results/",project_name,"_all_combined.csv", sep="")
 model_vul_data <- read.csv(csv_out_data, stringsAsFactors=FALSE)
 metrics_to_compare=c("X", "transformed", "vulnerability")
-vul_data=model_vul_data[model_vul_data$X %in% spp_to_compare,metrics_to_compare]
+vul_data=model_vul_data[model_vul_data$spp %in% spp_to_compare,metrics_to_compare]
 vul_data=cbind(vul_data[order(vul_data$X),],Expert=exp_vul_data[order(exp_vul_data$X),"Expert"])
 
 for (i in 2:3){
@@ -34,3 +35,4 @@ for (i in 2:3){
 ##To calculate r values  
 r=cor(rank(vul_data[,2]), rank(vul_data[,4]))
 #rsq=r^2 
+rank(vul_data[,i]), rank(vul_data[,4])
