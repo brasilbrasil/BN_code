@@ -139,8 +139,8 @@ plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty,
   title("")
   
   legend('topright',temp_legends, #inset=0.05, ###DEBUG USE INSET ARGUMENT
-         fill = temp_colors, bty = 'n',
-         border = NA)
+        fill = temp_colors, bty = 'n',
+        border = NA)
   dev.off()  
   return()
 }
@@ -282,7 +282,7 @@ if (plot_hist){
   graph_table=graph_table[graph_table$graph_counts>1,]
   graph_indices=graph_table$graph_index
   hist_colors=c(rgb(1,0,0,1/5), rgb(0,1,0,2/5), rgb(0,0,1,1/5))
-  hist_legends=c("Micro refugia zone","Tolerate zone","Migration zone")
+  hist_legends=c("Microrefugia zone","Toleration zone","Migration zone")
   #hist_legends=c("Lost","Overlap","Gained")
   hist_lty=c(1,2,3)
   hist_line_color=c("red","green","blue")

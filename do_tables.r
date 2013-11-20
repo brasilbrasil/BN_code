@@ -1,5 +1,5 @@
 #first_and_last_discr_var=c(85:169)
-csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+csv_data=paste("results/",project_name,"_","all_combined_corrected.csv",sep="")
 variables.file="variables.csv"
 dir.create("tables/",showWarnings=FALSE)
 
@@ -373,7 +373,7 @@ aggregate(MRzone_slr ~ Coastal, data=tmp, FUN=mean)
 # most_vuln_spp$Alien_hab_comp==0
 
 ####MAKE TOOL AUX DATA
-csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+csv_data=paste("results/",project_name,"_","all_combined_corrected.csv",sep="")
 all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
 variables.file="variables.csv"
 vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
@@ -402,7 +402,7 @@ for (jnk in jnkk){
 }
 node_cols=jnkk1
 
-aux_data0=all_combined[,header_cols]
+aux_data0=all_combined[,header_cols] ###the header_col names seem wrong!! "Effective_MRF_area" "Effective_Tol_zone_area" "Effective_Mig_area" "Habitat_qual_MRF" "Tol_Zone_Habitat_qual" "Mig_Zone_Habitat_qual"   "Dispersion"  
 
 vars=c('Resist', 'Migrate', 'Micro_refugia', 'Effective_MRF_area', 'Effective_Tol_zone_area', 'Effective_Mig_area', 'Habitat_qual_MRF', 'Tol_Zone_Habitat_qual', 'Mig_Zone_Habitat_qual', 'Dispersion')
 for (var in vars){
@@ -487,7 +487,7 @@ write.csv(all_names, paste("results/",  project_name, "_tool_aux_data_col_descri
 #node_names=vlist$Tool_name_short
 
 ###APPENDIX ALL SPP VULNERABILITIES!
-csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+csv_data=paste("results/",project_name,"_","all_combined_corrected.csv",sep="")
 all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
 variables.file="variables.csv"
 vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
@@ -589,7 +589,7 @@ write.csv(aux_data0, paste("tables/",  project_name, "_appendix10_all_spp_result
 
 
 ###APPENDIX ALL SPP VULNERABILITIES!
-csv_data=paste("results/",project_name,"_","all_combined.csv",sep="")
+csv_data=paste("results/",project_name,"_","all_combined_corrected.csv",sep="")
 all_combined <- read.csv(csv_data, stringsAsFactors=FALSE)
 variables.file="variables.csv"
 vlist <- read.csv(variables.file, stringsAsFactors=FALSE)

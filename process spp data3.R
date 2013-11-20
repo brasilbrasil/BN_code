@@ -13,27 +13,27 @@ if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
 }else{
-  wd <- "C:/Users/lfortini/Dropbox/current work/USGS Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template"
+  wd <- "D:/Dropbox/current work/USGS Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template"
   #wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template/" #C:\Users\lfortini\Dropbox\USGS\Science\0-ongoing\VAs\HI spp VA\BN vulnerability\Full Process template
-  code_loc="C:/Users/lfortini/Dropbox/code/BN_code/"
+  code_loc="D:/Dropbox/code/BN_code/"
 }
 setwd(wd)
 
 project_name="unknwnfacs_eqwgts_priors_thirddispersion" # _thirddispersion #_min_habqual _traitsoff
 categorize.GIS.data <- FALSE
 calc_priors= FALSE
-plot_hist = TRUE ##if categorizing data, this switch controls whether histograms of all model
+plot_hist = F ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
 create_factor_mean_table=FALSE
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
-calculate.conditional.ps <- TRUE
-merge_all_results_and_data=FALSE
-do_tables=FALSE
+calculate.conditional.ps <- F
+merge_all_results_and_data=F
+do_tables=T
 expert_comparison=FALSE
 do_correl_analyses= FALSE
 create_response_histograms=FALSE
-vulnerability_contrasts=FALSE
+vulnerability_contrasts=T
 
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 sp_list_offset=NULL# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
@@ -103,9 +103,9 @@ uncat.data.file <- paste(project_name, "_rld.csv",sep="")
 ## "Resist" is the model node name usually interpreted as
 ## "Tolerate"
 
-output.nodes <- c("Resist", "Migrate", "Micro_refugia")
-#output.nodes <- c("Resist", "Migrate", "Micro_refugia","Effective_MRF_area", "Effective_Tol_zone_area", "Effective_Mig_area",
-#                  "Habitat_qual_MRF", "Tol_Zone_Habitat_qual", "Mig_Zone_Habitat_qual", "Dispersion")
+#output.nodes <- c("Resist", "Migrate", "Micro_refugia")
+output.nodes <- c("Resist", "Migrate", "Micro_refugia","Effective_MRF_area", "Effective_Tol_zone_area", "Effective_Mig_area",
+                  "Habitat_qual_MRF", "Tol_Zone_Habitat_qual", "Mig_Zone_Habitat_qual", "Dispersion")
 
 ## Some functions to take a previously set flag to determine
 ## how much progress to report

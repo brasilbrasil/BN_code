@@ -1,6 +1,7 @@
+sp_to_remove=c("Gahnia lanaiensis")
 cat.data.file <- paste(project_name, "_qrld.csv",sep="")
 uncat.data.file <- paste(project_name, "_rld.csv",sep="")
-aux_data_file="//10.0.0.5/data2$//VA data/CAO/spp_habitat_requirements.csv"
+aux_data_file=paste0(code_loc,"spp_habitat_requirements_new_taxonomy.csv")
 
 veg_file="dominant_veg_classes.csv"
 all_vulnerabilities_file=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
@@ -27,7 +28,7 @@ all_species=vul_data$X
 i=1
 for (sp in all_species){
   jnk0=c()
-  jnk=which(aux_data$spp==sp)
+  jnk=which(aux_data$spp_old==sp)
   jnk=aux_data[jnk,]
   jnk0=jnk
   
@@ -82,4 +83,9 @@ all_combined=cbind(all_combined, rel_rank_vul, rank_cat_vuln)
 #   i=i+1  
 # }
 
+if (length(sp_to_remove)>0){
+  jnk=all_combined$spp %in% sp_to_remove
+  jnk=!jnk
+  all_combined=all_combined[jnk,]
+}
 write.csv(all_combined, all_combined_file, row.names=TRUE)

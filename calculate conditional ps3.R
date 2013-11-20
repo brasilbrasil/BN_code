@@ -92,7 +92,6 @@ if (!calculate.parallel) {
   ntimestamp(noisy)
   n2cat(noisy, "Starting.\n")
   cat("starting species response calculations")
-  s=splist[1]
   for (s in splist) {
     sp_csv=paste("spp_csvs/",project_name,"_",s,"_csv.csv", sep="")
     if (file.exists(sp_csv) & !overwrite_ps){
