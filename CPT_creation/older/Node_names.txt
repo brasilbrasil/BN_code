@@ -1,0 +1,9 @@
+Resist
+Micro_refugia
+Migrate
+Habitat_qual_MRF
+Mig_Zone_Habitat_qual
+Tol_Zone_Habitat_qual
+Dispersion
+x_protected_areas_in_RF
+Topo_divesity_RF
