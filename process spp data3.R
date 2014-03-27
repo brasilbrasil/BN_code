@@ -24,16 +24,17 @@ categorize.GIS.data <- FALSE
 calc_priors= FALSE
 plot_hist = F ##if categorizing data, this switch controls whether histograms of all model
                  ##variables will be created, with the breakpoints for the categories ploted along
-create_factor_mean_table=FALSE
+                  # creates figures for appendix 5
+create_factor_mean_table=FALSE #creates table 2 for report
 add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
 create.catnet.model <- FALSE
 calculate.conditional.ps <- F
-merge_all_results_and_data=F
-do_tables=T
-expert_comparison=FALSE
-do_correl_analyses= FALSE
-create_response_histograms=FALSE
-vulnerability_contrasts=T
+merge_all_results_and_data=F #merges all posterior Ps, factors states, along with all original data into single file
+do_tables=T #generates multiple tables from results including several in report (e.g., table 3-6)
+expert_comparison=FALSE #creates model vs expert comparison figure (Fig. 2)
+do_correl_analyses= FALSE #does correlation figures 16-17
+create_response_histograms=FALSE #does response histograms (Appendix 6)
+vulnerability_contrasts=T #does all group comparisons and related figures (Figs 10-13)
 
 threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 sp_list_offset=NULL# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
