@@ -1,6 +1,6 @@
 library("gdata") #for xlsx input
 rm(list = ls()) #remove all past worksheet variables
-setwd("C:/Users/lfortini/Dropbox/code/CPT creation/")
+setwd("D:/Dropbox/code/BN_code/other_analyses/cpt_creation/")
 #do not place conditional nodes up front of array, but as first parent in CPT in genie
 
 ####read xlsx file

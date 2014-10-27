@@ -1,3 +1,4 @@
 -Create_conditional_probs8.r uses an excel spreadsheet with all parent/child relationships to create csvs with for each CPT
--'add cases to GeNIe.R' uses the generated csvs to change the CPTs in the genie file provided 
+-'change prob in genie.R' uses the generated csvs to change the CPTs in the genie file provided 
+
  
