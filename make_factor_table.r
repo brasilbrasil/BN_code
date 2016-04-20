@@ -19,7 +19,7 @@ sd_res_table=res_table
 
 ttemp_var=ttemp_vars[1]
 for (ttemp_var in ttemp_vars){
-  if (vlist$table_vars[min(which(vlist$graph_name==ttemp_var))]){
+  if (vlist$table_vars[min(which(vlist$graph_name==ttemp_var))]){ #should the variable should be included in table?
     sub_ttemp_vars=vlist$Variable[vlist$graph_name==ttemp_var]
     sub_ttemp_var=sub_ttemp_vars[1]
     for (sub_ttemp_var in sub_ttemp_vars){      

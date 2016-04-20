@@ -13,35 +13,35 @@ if (server){
   wd <- "//10.0.0.5/data2$//PICCC_analysis/BN_vulnerability/Full Process template/"
   code_loc="Y:/code/BN_code/"
 }else{
-  wd <- "D:/Dropbox/current work/USGS Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template"
-  wd <- "D:/Full Process template/"
+  #wd <- "D:/Dropbox/current work/USGS Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template"
+  wd="D:/Dropbox/current work/HI plant VA/VA phase2 analysis/"
+  #wd <- "D:/Full Process template/"
   #D:\Dropbox\current work\HI plant VA\HI plant VA analysis\BN vulnerability model results\Full Process template
   #wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template/" #C:\Users\lfortini\Dropbox\USGS\Science\0-ongoing\VAs\HI spp VA\BN vulnerability\Full Process template
   code_loc="D:/Dropbox/code/BN_code/"
 }
 setwd(wd)
 
-project_name="unknwnfacs_eqwgts_priors_thirddispersion" # _thirddispersion #_min_habqual _traitsoff
+project_name="DDA1B" # _thirddispersion #_min_habqual _traitsoff
 categorize.GIS.data <- T #If true, runs categorize5.R scripts. This is the script that creates the thresholds for the different factors
 #and applies it to the data to create the state-based version of each factor considered.
 plot_hist = T ##if categorizing data, this switch controls whether histograms of all model
 ##variables will be created, with the breakpoints for the categories ploted along
 # creates figures for appendix 5
-calc_priors= FALSE #If true, runs calc priors.R. This script will simply use the data across all species 
+calc_priors= F #If true, runs calc priors.R. This script will simply use the data across all species 
 #to calculate the mean state frequency for each factor
-create_factor_mean_table=FALSE #creates table 2 for report
-add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped. This essentially inputs the factor states into the genie model 
+create_factor_mean_table=F #creates table 2 for report
+add.spp.to.GeNIe.model <- F # this step could reasonably be skipped. This essentially inputs the factor states into the genie model 
 #based on the available data for the species
-create.catnet.model <- FALSE #Creates catnet version of GeNIe model
+create.catnet.model <- F #Creates catnet version of GeNIe model
 calculate.conditional.ps <- F # Calculates posterior probabilities for species. This is the core of this repository
 merge_all_results_and_data=F #merges all posterior Ps, factors states, along with all original data into single file
 do_tables=T #generates multiple tables from results including several in report (e.g., table 3-6)
-expert_comparison=FALSE #creates model vs expert comparison figure (Fig. 2)
-do_correl_analyses= FALSE #does correlation figures 16-17
-create_response_histograms=FALSE #does response histograms (Appendix 6)
-vulnerability_contrasts=T #does all group comparisons and related figures (Figs 10-13)
+expert_comparison=F #creates model vs expert comparison figure (Fig. 2)
+do_correl_analyses= F #does correlation figures 16-17
+create_response_histograms=F #does response histograms (Appendix 6)
+vulnerability_contrasts=F #does all group comparisons and related figures (Figs 10-13)
 
-threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
 sp_list_offset=NULL# NULL #c(1,10) #to turn off, put NULL #sp_list_offset=NULL
 revert_sp_order=FALSE
 csv_out_data=paste("results/",project_name,"_spp_vulnerability_scores.csv", sep="")
@@ -57,6 +57,7 @@ config_file=NULL#"config_file4.r"
 n_instances=length(system('tasklist /FI "IMAGENAME eq Rscript.exe" ', intern = TRUE))-3
 cpucores=as.integer(Sys.getenv('NUMBER_OF_PROCESSORS'))
 
+
 if (!is.null(config_file)){
   source(paste(code_loc,config_file, sep=""))
 }
@@ -70,7 +71,7 @@ noisy <- 3
 ## of the many "Unknown" species to "Unknown" with a number, and change
 ## some spaces in column names to underscores before saving it as a
 ## .csv file. Some further processing of the data is done in "categorize.R"
-data.file <- "allspp.csv"
+data.file <- paste0(project_name, "_all_spp_values.csv") #"allspp.csv"
 
 ## a table of variables in the datafile linking them to nodes
 ## in the GeNiE model. It also contains space for parameters to
@@ -79,14 +80,19 @@ data.file <- "allspp.csv"
 ## quartiles for 3 categories)
 variables.file <- "variables.csv"
 
+##these are thresholds based on quantiles across all zones. Several zone specific metrics use this 
+##(determined by the variables$standard_threshold and variables$threshold_name). This sheet is calculated using 
+##the calc_thresholds.R script
+threshold_table <- read.csv(paste0(project_name, "_threshold_vars_and_vals.csv"), stringsAsFactors=FALSE)
+
 ## a table with a column "Species" containing the species we
 ## want to add cases for. GeNIe bogs down with too many cases, and
 ## sometimes we'll only want updates for a subset of species
-sppinterest.file <- "spinterest.csv"
+sppinterest.file <- "spinterest_sample.csv"
 
 ## the GeNiE model to use when analyzing the data, and to use as
 ## a source when creating the catnet version in R
-model.file <- "conceptual_model05_unknownfactors_equalweights_priors_thirddispersion.xdsl"
+model.file <- "VA model phase2 v2.xdsl"
 
 ## A sample model file to use when adding cases to the GeNIe model.
 ## I usually generate this by deleting all cases from the current
@@ -94,10 +100,10 @@ model.file <- "conceptual_model05_unknownfactors_equalweights_priors_thirddisper
 ## "delete me" to avoid species name collisions)
 ## Right now the code needs a blank, unpopulated GeNiE model
 ## with a single placeholder case
-model.file.in <- "conceptual_model05_unknownfactors_equalweights_priors_thirddispersion_template.xdsl"
+model.file.in <- "VA model phase2 v2 TEMPLATE.xdsl"
 
 ## this is the file name to use for the output GeNIe model
-model.file.out <- paste(project_name,"_test_out.xdsl", sep="")
+model.file.out <- paste(project_name,"_model_out.xdsl", sep="")
 
 ## After the GIS data has been categorized for each species,
 ## save it out to this .csv file

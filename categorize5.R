@@ -185,10 +185,11 @@ dash20s <- function(x) {
   x[x=="-"] <- "0"
   return(as.numeric(x))
 }
-rld$TL_ugly <- dash20s(rld$TL_ugly)
-rld$MG_ugly <- dash20s(rld$MG_ugly)
-rld$zone_aspect_stdTL <- dash20s(rld$zone_aspect_stdTL)
-rld$zone_aspect_stdMG <- dash20s(rld$zone_aspect_stdMG)
+rld$ugly__TL <- dash20s(rld$ugly__TL)
+rld$ugly__MG <- dash20s(rld$ugly__MG)
+rld$ugly__MR <- dash20s(rld$ugly__MR)
+#rld$zone_aspect_stdTL <- dash20s(rld$zone_aspect_stdTL)
+#rld$zone_aspect_stdMG <- dash20s(rld$zone_aspect_stdMG)
 
 ## load the list of variables and corresponding nodes
 vlist <- read.csv(variables.file, stringsAsFactors=FALSE)
@@ -215,7 +216,7 @@ rm(z, i, path)
 rld$prop_CE_dist <- rld$FCE_distance / sqrt(rld$sqkm_area_CCE)
 
 ## Amount of overlap
-rld$prop_CE_overlap <- rld$zone_areaTL / rld$sqkm_area_CCE
+rld$prop_CE_overlap <- rld$total_zone_area___TL / rld$sqkm_area_CCE
 
 ## Refugia proximity to mountaintops
 rld$RF_proximity_to_max_height_of_Mtn <- (1-rld$prop_bioreg_near_top)
@@ -274,8 +275,8 @@ vlist <- vlist[!is.na(vlist$Variable), ]
 ## (and sp_name and sp_code)
 nodevars <- vlist$Variable[vlist$Node %in% nodes] #what are the names of the spatial vars that have nodes?
 rld <- rld[, c("sp_name", "sp_code", nodevars)]
-
 ##debug code
+# nodevars %in% names(rld) 
 # for (n in nodevars){
 #   jnk=rld[,n]
 #   cat(n," found", "\n")
@@ -316,6 +317,7 @@ if (plot_hist){
     temp_border = c()
     zones_data=c()
     vs <- vlist$Variable[which(vlist$Node %in% vars_to_plot)] #what are the spatial variable names
+    #vs %in% names(rld)
     minVs=min(rld[, vs],na.rm=T) #what are the min and max for the variables considered?
     maxVs=max(rld[, vs],na.rm=T) #what are the min and max for the variables considered?
     breaks=seq(minVs,maxVs,(maxVs-minVs)/50) #break data into 50 histograph classes
@@ -407,7 +409,7 @@ qrld$sp_code <- rld$sp_code
 
 ## loop through the model nodes, identify associated variables, categorize
 ## them as appropriate and store the results in the qrld dataframe
-n=datanodes[32]
+n=datanodes[18]
 for (n in datanodes) {
   node.id <- which(nodes %in% n)
   if (length(node.id) != 1)
@@ -491,7 +493,7 @@ for (n in datanodes) {
       temp_res = q3levels(rld[, v], b, categories)
     } else {
       temp_res = Abs_q3levels(rld[, v], b, categories)
-      }
+    }
     assign("quant_data", temp_res[[1]])
     assign("thresholds", temp_res[[2]])
     rm("temp_res")

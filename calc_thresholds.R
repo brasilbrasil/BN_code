@@ -12,14 +12,16 @@ if (server){
   wd <- "//10.0.0.5/data2$//BN vulnerability/Full Process/"
   code_loc="Y:/code/BN_code/"
 }else{
-  wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template"
+  wd="D:/Dropbox/current work/HI plant VA/VA phase2 analysis/"
+  #wd <- "C:/Users/lfortini/Google Drive/BN vulnerability/Full Process template"
   code_loc="C:/Users/lfortini/code/BN_code/"
 }
 
 setwd(wd)
+project_name="DDA1B" # _thirddispersion #_min_habqual _traitsoff
 
-threshold_table <- read.csv("threshold_vars_and_vals.csv", stringsAsFactors=FALSE)
-rld <- read.csv("allspp.csv", stringsAsFactors=FALSE)
+threshold_table <- read.csv(paste0(project_name, "_threshold_vars_and_vals.csv"), stringsAsFactors=FALSE)
+rld <- read.csv(paste0(project_name, "_all_spp_values.csv"), stringsAsFactors=FALSE)
 
 
 q3levels <- function(x, q=c(0.33, 0.66), lv=c("Low", "Medium", "High")) {
@@ -90,4 +92,4 @@ for (n in threshold_table$Var) {
   rm(temp_res, thresholds, b)
 }
 
-write.csv(threshold_table, "threshold_vars_and_vals.csv", row.names=FALSE)
+write.csv(threshold_table, paste0(project_name, "_threshold_vars_and_vals.csv"), row.names=FALSE)

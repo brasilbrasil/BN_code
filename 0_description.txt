@@ -36,6 +36,11 @@ create_response_histograms #does response histograms (Appendix 6). This is simil
 
 vulnerability_contrasts #does all group comparisons and related figures (Figs 10-13)
 
+PRIOR STEPS NECESSARY:
+-Spatial analysis must be complete for variables included
+-calc_thresholds.r must be executed to create thresholds for zone specific variables that use non-zone-specific thresholds (see below)
+
+
 NECESSARY FILES:
 data.file <- "allspp.csv"
 ## This file is the raw data for each species. The column "sp_name" should
@@ -44,6 +49,12 @@ data.file <- "allspp.csv"
 ## of the many "Unknown" species to "Unknown" with a number, and change
 ## some spaces in column names to underscores before saving it as a
 ## .csv file. Some further processing of the data is done in "categorize.R"
+
+threshold_vars_and_vals.csv
+##this file has thresholds that area based on quantiles using data for the 3 zones together. This is used in the categorize.GIS.data. 
+##This is created using the calc_thresholds.r
+##script. This was necessary to do as for some metrics, if we used zone specific thresholds what qualifies as high vs low ammount of native-
+##dominated habitat could change substantially among zones
 
 variables.file <- "variables.csv" #The necessary columns are described in variables_file_description.txt
 ## a table of variables in the datafile linking them to nodes
