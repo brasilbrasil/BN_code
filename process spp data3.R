@@ -14,21 +14,26 @@ if (server){
   code_loc="Y:/code/BN_code/"
 }else{
   wd <- "D:/Dropbox/current work/USGS Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template"
+  wd <- "D:/Full Process template/"
+  #D:\Dropbox\current work\HI plant VA\HI plant VA analysis\BN vulnerability model results\Full Process template
   #wd <- "C:/Users/lfortini/Dropbox/USGS/Science/0-ongoing/VAs/HI spp VA/BN vulnerability/Full Process template/" #C:\Users\lfortini\Dropbox\USGS\Science\0-ongoing\VAs\HI spp VA\BN vulnerability\Full Process template
   code_loc="D:/Dropbox/code/BN_code/"
 }
 setwd(wd)
 
 project_name="unknwnfacs_eqwgts_priors_thirddispersion" # _thirddispersion #_min_habqual _traitsoff
-categorize.GIS.data <- FALSE
-calc_priors= FALSE
-plot_hist = F ##if categorizing data, this switch controls whether histograms of all model
-                 ##variables will be created, with the breakpoints for the categories ploted along
-                  # creates figures for appendix 5
+categorize.GIS.data <- T #If true, runs categorize5.R scripts. This is the script that creates the thresholds for the different factors
+#and applies it to the data to create the state-based version of each factor considered.
+plot_hist = T ##if categorizing data, this switch controls whether histograms of all model
+##variables will be created, with the breakpoints for the categories ploted along
+# creates figures for appendix 5
+calc_priors= FALSE #If true, runs calc priors.R. This script will simply use the data across all species 
+#to calculate the mean state frequency for each factor
 create_factor_mean_table=FALSE #creates table 2 for report
-add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped
-create.catnet.model <- FALSE
-calculate.conditional.ps <- F
+add.spp.to.GeNIe.model <- FALSE # this step could reasonably be skipped. This essentially inputs the factor states into the genie model 
+#based on the available data for the species
+create.catnet.model <- FALSE #Creates catnet version of GeNIe model
+calculate.conditional.ps <- F # Calculates posterior probabilities for species. This is the core of this repository
 merge_all_results_and_data=F #merges all posterior Ps, factors states, along with all original data into single file
 do_tables=T #generates multiple tables from results including several in report (e.g., table 3-6)
 expert_comparison=FALSE #creates model vs expert comparison figure (Fig. 2)

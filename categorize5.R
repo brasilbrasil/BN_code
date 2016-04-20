@@ -1,6 +1,6 @@
 require(XML)
 library(ggplot2)
-polish_thresholds=TRUE
+polish_thresholds=TRUE #if T, will align threshold in plot with closest histogram breaks
 
 if (plot_hist){
   out_graph_dir=paste(wd, "graphs/", sep="")
@@ -101,6 +101,19 @@ plot_hist_fx <- function(v, x, q, lv, graph_xlabel) {
 }
 
 plot_multi_hist_fx <- function(v, x, q, lv, temp_colors, temp_legends, temp_lty, temp_border, graph_xlabel) { #graph_name, temp_hists, thresholds, categories, temp_colors, temp_legends
+  v=graph_name
+  x=temp_hists
+  q=thresholds
+  lv=categories
+  temp_colors=temp_colors
+  temp_legends=temp_legends
+  temp_lty
+  temp_border
+  graph_xlabel
+  temp_lty
+  temp_border
+  graph_xlabel
+  
   jpeg_name=paste(out_graph_dir,project_name,"_",v,".jpg", sep = "")
   jpeg(jpeg_name,
        width = 5, height = 5, units = "in",
@@ -158,7 +171,7 @@ plot_multi_hist_fx2 <- function(v, x, q, lv, temp_colors, temp_legends, graph_xl
   return()
 }
 ## load un-categorized data
-rld <- read.csv(data.file, stringsAsFactors=FALSE)
+rld <- read.csv(data.file, stringsAsFactors=FALSE) #this loads data file with all metrics
 
 ## some populations "wink out" from future to current range
 ## tranlate those to infinite
@@ -211,6 +224,9 @@ rld$prop_MR_lava_area <- rld$zone_lavaflow_area_MR
 rld$prop_TL_lava_area <- rld$zone_lavaflow_areaTL 
 rld$prop_MG_lava_area <- rld$zone_lavaflow_areaMG 
 
+##population connectivity
+rld$pop_connectivity=rld$n_bioreg_trans_in_CCE/rld$n_bioreg_in_CCE
+rld$prehist_distribution_index=rld$n_habitats_BPS/rld$n_habitats_landfire_native
 # ## Scaling of existing variables
 # ## Calculated metrics
 # rld$Zone_slope_stdMG <- rld$Zone_slope_stdMG / rld$Zone_slope_medMG
@@ -256,7 +272,7 @@ vlist <- vlist[!is.na(vlist$Variable), ]
 
 ## simplify rld to contain only variables associated with nodes
 ## (and sp_name and sp_code)
-nodevars <- vlist$Variable[vlist$Node %in% nodes]
+nodevars <- vlist$Variable[vlist$Node %in% nodes] #what are the names of the spatial vars that have nodes?
 rld <- rld[, c("sp_name", "sp_code", nodevars)]
 
 ##debug code
@@ -266,7 +282,7 @@ rld <- rld[, c("sp_name", "sp_code", nodevars)]
 # }
 
 ## the nodes for which we have data
-datanodes <- vlist$Node[vlist$Node %in% nodes]
+datanodes <- vlist$Node[vlist$Node %in% nodes] #what are the name of the nodes that have spatial data that are in the BN model?
 
 
 if (plot_hist){
@@ -280,7 +296,7 @@ if (plot_hist){
   graph_table=cbind(graph_index,graph_counts)
   graph_table=as.data.frame(graph_table)
   graph_table=graph_table[graph_table$graph_counts>1,]
-  graph_indices=graph_table$graph_index
+  graph_indices=graph_table$graph_index #what graphs have more than 1 variable to be plotted (for multi_hist function)
   hist_colors=c(rgb(1,0,0,1/5), rgb(0,1,0,2/5), rgb(0,0,1,1/5))
   hist_legends=c("Microrefugia zone","Toleration zone","Migration zone")
   #hist_legends=c("Lost","Overlap","Gained")
@@ -299,22 +315,22 @@ if (plot_hist){
     temp_lty = c()
     temp_border = c()
     zones_data=c()
-    vs <- vlist$Variable[which(vlist$Node %in% vars_to_plot)]
-    minVs=min(rld[, vs],na.rm=T)
-    maxVs=max(rld[, vs],na.rm=T)
-    breaks=seq(minVs,maxVs,(maxVs-minVs)/50)
+    vs <- vlist$Variable[which(vlist$Node %in% vars_to_plot)] #what are the spatial variable names
+    minVs=min(rld[, vs],na.rm=T) #what are the min and max for the variables considered?
+    maxVs=max(rld[, vs],na.rm=T) #what are the min and max for the variables considered?
+    breaks=seq(minVs,maxVs,(maxVs-minVs)/50) #break data into 50 histograph classes
     n = vars_to_plot[1]
-    for (n in vars_to_plot) {
+    for (n in vars_to_plot) { #for each of the variables to plot in subplots
       node.id <- which(nodes %in% n)
       if (length(node.id) != 1)
         stop("Node ID either not found or found more than once!\n")
-      v <- vlist$Variable[which(vlist$Node %in% n)]
+      v <- vlist$Variable[which(vlist$Node %in% n)] #what is spatial var?
       if (length(v) != 1)
         stop("Node not associated with exactly one variable!\n")
-      vlistrow <- which(vlist$Node %in% n)
+      vlistrow <- which(vlist$Node %in% n) #in which row of the variable.list.csv is the variable
       if (length(vlistrow) != 1)
         stop("Node not found exactly once in vlist!\n")
-      categories <- catlist[[node.id]]
+      categories <- catlist[[node.id]] #using data extracted from the BN model, get the category names 
       n3cat(noisy, "Node: ", n, "\tvariable: ", v, "\n")
       n3cat(noisy, "\tCategories: ", paste(categories, collapse=", "), "\n")
       ## some variables are special castes to be categorized later
@@ -332,7 +348,7 @@ if (plot_hist){
       ## if the node has two categories, break it into pieces by the
       ## percentile in vlist -- or by the median as default
       node_name=vlist$node_names[vlistrow]
-      if (ko==1){
+      if (ko==1){ #only create threshold when processing the first subplot
         graph_name=vlist$graph_name[vlistrow]
         graph_xlabel=vlist$graph_units[vlistrow]
         threshold_name=vlist$threshold_name[vlistrow]
@@ -347,11 +363,11 @@ if (plot_hist){
           thresholds <- threshold_table[jnk,2]
         }
       }
-      graph_zone=vlist$graph_zone[vlistrow]
+      graph_zone=vlist$graph_zone[vlistrow] #what is the zone associated with this variable
       temp_hist=paste("p",graph_zone,sep="")
       r=hist(rld[, v], main="", breaks = breaks)
       lines(r, lty = 3, border = "purple")
-      assign(temp_hist,r)
+      assign(temp_hist,r) #save histograph data to variable
       if (polish_thresholds){
         for (threshold in thresholds){
           jnk=c(r$breaks)
